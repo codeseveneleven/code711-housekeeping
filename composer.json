@@ -1,0 +1,26 @@
+{
+	"name": "code711/code711-housekeeping",
+	"description": "Housekeeping",
+	"authors": [
+		{
+			"name": "Patricia Ottmar",
+			"role": "Developer",
+			"email": "p.ottmar@12bis3.de"
+		}
+	],
+	"type": "typo3-cms-extension",
+	"license": "MIT",
+	"require": {
+		"typo3/cms-core": "^11.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"Code711\\Code711Housekeeping\\": "Classes/"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "code711_housekeeping"
+		}
+	}
+}

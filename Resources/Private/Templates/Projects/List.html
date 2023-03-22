@@ -1,0 +1,59 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:layout name="Backend" />
+
+<f:section name="main">
+    <div class="widget-table-wrapper">
+        <table class="widget-table">
+            <tr>
+                <th><strong>Project</strong></th>
+                <th><strong>Version</strong></th>
+                <th><strong>Latest</strong></th>
+                <th><strong>Type</strong></th>
+                <th><strong>ELTS</strong></th>
+                <th><strong>URL</strong></th>
+            </tr>
+            <f:for each="{items}" as="item">
+                <tr>
+                    <td>{item.title}</td>
+                    <f:if condition="{item.version}">
+                        <f:then>
+                            <td class="{f:render(section: 'VersionClass', arguments: '{item: item}')}">
+                                TYPO3 {item.version}
+                            </td>
+                            <td>TYPO3 {item.latest}</td>
+                            <td>{item.type}</td>
+                            <td>{f:if(condition: '{item.elts}', then: 'yes', else: 'no')}</td>
+                        </f:then>
+                        <f:else>
+                            <td>Not checked!</td>
+                            <td>Not checked!</td>
+                            <td>Not checked!</td>
+                            <td>Not checked!</td>
+                        </f:else>
+                    </f:if>
+                    <td>
+                        <f:link.external uri="{item.url}" target="_blank" rel="noreferrer">
+                            <strong>{item.url}</strong>
+                        </f:link.external>
+                    </td>
+                </tr>
+            </f:for>
+        </table>
+    </div>
+</f:section>
+
+<f:section name="VersionClass"><f:spaceless>
+    <f:if condition="{item.version} == {item.latest}">
+        <f:then>bg-green</f:then>
+        <f:else>
+            <f:if condition="{item.type} == 'security'">
+                <f:then>bg-red</f:then>
+                <f:else>bg-orange</f:else>
+            </f:if>
+        </f:else>
+    </f:if>
+</f:spaceless></f:section>
+
+</html>

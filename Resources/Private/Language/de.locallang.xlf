@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de">
+		<header/>
+		<body>
+            <trans-unit id="project">
+                <target>Housekeeping: Projekt</target>
+            </trans-unit>
+			<trans-unit id="project.title">
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="project.url">
+				<target>URL</target>
+			</trans-unit>
+			<trans-unit id="project.version">
+				<target>Version (manuelle Eingabe für TYPO3-Version kleiner 11 oder wenn Projekt nicht prüfbar)</target>
+			</trans-unit>
+			<trans-unit id="project.latest">
+				<target>Latest</target>
+			</trans-unit>
+			<trans-unit id="project.type">
+				<target>Typ</target>
+			</trans-unit>
+			<trans-unit id="project.elts">
+				<target>ELTS</target>
+			</trans-unit>
+			<trans-unit id="project.severity">
+				<target>Schwere</target>
+			</trans-unit>
+			<trans-unit id="project.group">
+				<target>Gruppe</target>
+			</trans-unit>
+			<trans-unit id="group.code">
+				<source>Code</source>
+			</trans-unit>
+
+			<trans-unit id="group">
+				<target>Housekeeping: Gruppe</target>
+			</trans-unit>
+			<trans-unit id="group.title">
+				<target>Titel</target>
+			</trans-unit>
+
+			<trans-unit id="project.tab.group">
+				<target>Gruppe</target>
+			</trans-unit>
+
+			<trans-unit id="widgets.projects.title">
+				<target>Meine Projekte</target>
+			</trans-unit>
+			<trans-unit id="widgets.projects.description">
+				<target>Listet Projekte mit Versionen</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

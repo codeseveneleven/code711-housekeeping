@@ -1,0 +1,34 @@
+services:
+  _defaults:
+    autowire: false
+    autoconfigure: true
+    public: false
+
+  Code711\Code711Housekeeping\:
+    resource: '../Classes/*'
+  Code711\Code711Housekeeping\Command\UpdateVersionsCommand:
+    tags:
+      - name: 'console.command'
+        command: 'housekeeping:update'
+        description: 'update versions'
+        schedulable: true
+
+  dashboard.widget.projects:
+    class: 'Code711\Code711Housekeeping\Widgets\ProjectsWidget'
+    arguments:
+      $view: '@dashboard.views.widget'
+      $options:
+        groups:
+        sorting:
+          - 'severity desc'
+          - 'version asc'
+          - 'title asc'
+    tags:
+      - name: dashboard.widget
+        identifier: 'projects'
+        groupNames: 'general'
+        title: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.projects.title'
+        description: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.projects.description'
+        iconIdentifier: 'content-widget-text'
+        height: 'large'
+        width: 'large'

@@ -1,0 +1,7 @@
+module.tx_dashboard {
+  view {
+    templateRootPaths {
+      110 = EXT:code711_housekeeping/Resources/Private/Templates/Dashboard/Widgets/
+    }
+  }
+}
