@@ -17,7 +17,6 @@ namespace Code711\Code711Housekeeping\Widgets;
 
 use Doctrine\DBAL\Connection as ConnectionAlias;
 use Doctrine\DBAL\Exception;
-use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\Widgets\AdditionalCssInterface;
