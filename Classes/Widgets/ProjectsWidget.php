@@ -28,9 +28,9 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
 {
 
     public function __construct(
-        private readonly WidgetConfigurationInterface $configuration,
-        protected readonly ?StandaloneView $view = null,
-        private readonly array $options = []
+        private WidgetConfigurationInterface $configuration,
+        protected ?StandaloneView $view = null,
+        private array $options = []
     ) {
     }
 
