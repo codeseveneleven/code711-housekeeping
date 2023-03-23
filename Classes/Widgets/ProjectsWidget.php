@@ -16,50 +16,40 @@ declare(strict_types=1);
 namespace Code711\Code711Housekeeping\Widgets;
 
 use Doctrine\DBAL\Connection as ConnectionAlias;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\Widgets\AdditionalCssInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
 {
 
-    private WidgetConfigurationInterface $configuration;
-
-    private StandaloneView $view;
-
-    private array $options;
-
     public function __construct(
-        WidgetConfigurationInterface $configuration,
-        StandaloneView $view,
-        array $options = []
+        private readonly WidgetConfigurationInterface $configuration,
+        protected readonly ?StandaloneView $view = null,
+        private readonly array $options = []
     ) {
-        $this->configuration = $configuration;
-        $this->view = $view;
-        $this->options = $options;
     }
 
     /**
-     * @throws DBALException|Exception
+     * @return string
+     * @throws Exception
      */
     public function renderWidgetContent(): string
     {
-        $this->view->setTemplate('ProjectsWidget');
         $this->view->assignMultiple([
             'items' => $this->getItems(),
             'configuration' => $this->configuration,
         ]);
-        return $this->view->render();
+        return $this->view->render('ProjectsWidget');
     }
 
     /**
-     * @throws DBALException
+     * @return array
      * @throws Exception
      */
     public function getItems(): array
@@ -91,7 +81,6 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
                     $queryBuilder->addOrderBy($explodes[0], $order);
                 }
             }
-            //$queryBuilder->orderBy('p.severity', 'DESC');
         }
 
         return $queryBuilder->executeQuery()->fetchAllAssociative();
@@ -103,4 +92,10 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
             'EXT:code711_housekeeping/Resources/Public/Css/ProjectWidget.css',
         ];
     }
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
 }

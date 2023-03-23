@@ -11,7 +11,7 @@
 	"type": "typo3-cms-extension",
 	"license": "MIT",
 	"require": {
-		"typo3/cms-core": "^11.5"
+		"typo3/cms-core": "^11.5 | ^12.2"
 	},
 	"autoload": {
 		"psr-4": {
