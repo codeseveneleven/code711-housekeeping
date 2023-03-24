@@ -14,6 +14,12 @@ Install it via `composer req code711/code711-housekeeping`.
 
 Activate the extension.
 
+Add credentials in AdditionalConfiguration.php:
+````
+$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['code711_housekeeping']['REST_API_USER'] = 'MySecureUser';
+$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['code711_housekeeping']['REST_API_PW'] = 'gdhsg7773b7z$§"V66678v';
+````
+
 ## Groups and projects
 
 Add a new record `Housekeeping: Project` in list module.
