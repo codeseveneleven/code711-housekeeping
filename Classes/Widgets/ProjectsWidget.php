@@ -16,22 +16,27 @@ declare(strict_types=1);
 namespace Code711\Code711Housekeeping\Widgets;
 
 use Doctrine\DBAL\Connection as ConnectionAlias;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Dashboard\Widgets\AdditionalCssInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
 {
-
     public function __construct(
         private WidgetConfigurationInterface $configuration,
         protected ?StandaloneView $view = null,
         private array $options = []
     ) {
+        if (VersionNumberUtility::getNumericTypo3Version() < 12) {
+            $this->setOptions($this->options);
+        }
     }
 
     /**
@@ -49,7 +54,8 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
 
     /**
      * @return array
-     * @throws Exception
+     * @throws DBALException
+     * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function getItems(): array
     {
@@ -66,7 +72,7 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
                     'g.code',
                     $queryBuilder->createNamedParameter(
                         $this->options['groups'],
-                        ConnectionAlias::PARAM_INT_ARRAY
+                        ConnectionAlias::PARAM_STR_ARRAY
                     )
                 )
             );
@@ -90,6 +96,11 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
         return [
             'EXT:code711_housekeeping/Resources/Public/Css/ProjectWidget.css',
         ];
+    }
+
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 
     public function getOptions(): array
