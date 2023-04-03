@@ -24,6 +24,7 @@ use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -41,28 +42,40 @@ class UpdateService implements LoggerAwareInterface
     }
 
     /**
-     * @throws Exception
+     * @throws DBALException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function updateProject(int $id, array $record): void
     {
         if ($id && !empty($record['url'])) {
 
+            $typo3VersionChecker = GeneralUtility::makeInstance(ApiService::class);
+            $typo3VersionChecker->setLogger($this->logger);
+
+            $projectVersion = $record['version'];
             try {
+                $projectVersion = $typo3VersionChecker->projectVersion($record);
+            } catch (GuzzleException|\JsonException $e) {
+                $this->logger->error($e->getCode() . ': ' . $e->getMessage());
+            }
 
-                $typo3VersionChecker = GeneralUtility::makeInstance(ApiService::class);
-                $typo3VersionChecker->setLogger($this->logger);
+            if ($projectVersion) {
 
-                $projectVersion = $record['version'] ?: $typo3VersionChecker->projectVersion($record);
+                $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
 
-                if (!empty($projectVersion)) {
-
-                    $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
+                $latestRelease = '';
+                try {
                     $latestRelease = $typo3VersionChecker->getLatestTypo3Release((int)$major);
                     $this->logger->info('fetching latest release');
+                } catch (GuzzleException|\JsonException $e) {
+                    $this->logger->error($e->getCode() . ': ' . $e->getMessage());
+                }
 
+                if (!empty($latestRelease)) {
                     $severity = $this->checkSeverity($major, $projectVersion, $latestRelease);
 
-                    $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_zwbisdreibooking_domain_model_restaurant');
+                    $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_code711housekeeping_domain_model_project');
                     /** @var Statement $stmt */
                     $queryBuilder
                         ->update('tx_code711housekeeping_domain_model_project')
@@ -72,13 +85,10 @@ class UpdateService implements LoggerAwareInterface
                         ->set('elts', (int)$latestRelease['elts'])
                         ->set('severity', $severity)
                         ->where(
-                            $queryBuilder->expr()->eq('uid', $id)
+                            $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($id, Connection::PARAM_INT))
                         )
                         ->execute();
                 }
-
-            } catch (GuzzleException|\JsonException|DBALException $e) {
-                $this->logger->error($e->getCode() . ': ' . $e->getMessage());
             }
         }
     }

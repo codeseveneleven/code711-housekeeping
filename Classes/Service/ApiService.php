@@ -101,9 +101,9 @@ class ApiService implements LoggerAwareInterface
         $res = $client->request('get', $project['url'] . 'api/v1/version', ['auth' => [$apiUser, $apiPw]]);
 
         if ($res->getStatusCode() === 200 && (
-            $res->getHeader('content-type')[0] === 'application/json'
-            || $res->getHeader('content-type')[0] === 'application/json; charset=utf-8'
-        )) {
+                $res->getHeader('content-type')[0] === 'application/json'
+                || $res->getHeader('content-type')[0] === 'application/json; charset=utf-8'
+            )) {
             $result = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
             $this->logger->info('report ' . $project['url'] . 'api/v1/version', $result);
             if (!empty($result['version'])) {
