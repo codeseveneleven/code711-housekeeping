@@ -55,7 +55,10 @@ class UpdateService implements LoggerAwareInterface
 
             $projectVersion = $record['version'];
             try {
-                $projectVersion = $typo3VersionChecker->projectVersion($record);
+                $checkedVersion = $typo3VersionChecker->projectVersion($record);
+                if ($checkedVersion) {
+                    $projectVersion = $checkedVersion;
+                }
             } catch (GuzzleException|\JsonException $e) {
                 $this->logger->error($e->getCode() . ': ' . $e->getMessage());
             }
@@ -63,10 +66,13 @@ class UpdateService implements LoggerAwareInterface
             if ($projectVersion) {
 
                 $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
+                if ($major == 6) {
+                    $major = substr($projectVersion, 0, 2);
+                }
 
                 $latestRelease = '';
                 try {
-                    $latestRelease = $typo3VersionChecker->getLatestTypo3Release((int)$major);
+                    $latestRelease = $typo3VersionChecker->getLatestTypo3Release($major);
                     $this->logger->info('fetching latest release');
                 } catch (GuzzleException|\JsonException $e) {
                     $this->logger->error($e->getCode() . ': ' . $e->getMessage());

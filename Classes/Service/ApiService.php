@@ -73,7 +73,7 @@ class ApiService implements LoggerAwareInterface
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function getLatestTypo3Release(int $version): array
+    public function getLatestTypo3Release(string $version): array
     {
         $release = [];
 
