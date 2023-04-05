@@ -67,7 +67,7 @@ class UpdateService implements LoggerAwareInterface
 
                 $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
                 if ($major == 6) {
-                    $major = substr($projectVersion, 0, 2);
+                    $major = substr($projectVersion, 0, 3);
                 }
 
                 $latestRelease = '';
