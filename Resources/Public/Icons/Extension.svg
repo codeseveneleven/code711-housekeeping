@@ -1,16 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="59.527px" height="59.528px" viewBox="0 0 59.527 59.528" enable-background="new 0 0 59.527 59.528" xml:space="preserve">
-<g>
-	<path fill-rule="evenodd" clip-rule="evenodd" fill="#C8C8C8" d="M35.246,2.404c9.655,0.094,18.189,4.28,23.585,10.698
-		C53.067,5.904,43.689,1.164,33.043,1.06C15.333,0.891,0.851,13.607,0.698,29.469c-0.154,15.627,13.67,28.466,31.022,29l0.79-4.58
-		C17.223,52.58,4.995,42.848,5.128,28.852C5.271,14.085,18.753,2.244,35.246,2.404z"/>
-	<path fill="#981914" d="M27.272,15.813c0,0-1.819,0.476-1.978,0.478c-1.66,0.425-3.423,0.741-5.188,0.74l-0.433,2.564l6.737,0.009
-		l-3.572,22.341l3.956,0.008l4.164-26.133L27.272,15.813z"/>
-	<path fill="#981914" d="M39.687,38.452l11.914,0.023l-0.591,3.526l-17.212-0.033l-0.209-3.317c3.53-1.753,7.279-4.793,10.011-7.62
-		c2.033-2.082,5.414-6.248,5.419-9.297c0.009-2.401-1.916-3.318-4.056-3.319c-2.567-0.004-4.705,1.273-6.796,2.552l-1.328-2.622
-		c3.208-2.239,5.348-3.357,9.359-3.35c4.491,0.007,7.163,1.883,7.152,6.698C53.338,28.213,44.928,35.469,39.687,38.452z"/>
-</g>
+<svg width="100%" height="100%" viewBox="0 0 79 79" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <circle cx="39.03" cy="39.03" r="39.03" style="fill:rgb(43,118,139);"/>
+    <path d="M35.7,66.02L50.39,24.46L58.59,24.46L43.87,66.02L35.7,66.02Z" style="fill:rgb(253,197,51);fill-rule:nonzero;"/>
+    <path d="M75.24,24.46L69.76,24.46L55.07,66.02L63.24,66.02L76.58,28.35C76.2,27.02 75.76,25.72 75.25,24.45L75.24,24.46Z" style="fill:rgb(253,197,51);fill-rule:nonzero;"/>
+    <path d="M17.09,24.46L16.41,30.8L28.86,30.8L16.41,66.02L24.58,66.02L39.3,24.46L17.09,24.46Z" style="fill:white;fill-rule:nonzero;"/>
 </svg>
