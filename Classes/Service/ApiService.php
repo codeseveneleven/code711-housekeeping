@@ -33,58 +33,35 @@ class ApiService implements LoggerAwareInterface
     use LoggerAwareTrait;
 
     /**
-     * @return array
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function getLatestTypo3Releases(): array
+    public function getLatestTypo3Release(string $projectVersion): array
     {
-        // https://get.typo3.org/api/doc
-
-        $apiUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'typo3Url');
-        $minVersion = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'minVersion');
-
-        $releases = [];
-
-        $client = new Client();
-        $res = $client->get($apiUrl . 'major');
-        if ($res->getStatusCode() === 200 && $res->getHeader('content-type')[0] === 'application/json') {
-            $majors = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-            foreach ($majors as $major) {
-                $version = $major['version'];
-                if ($version >= $minVersion) {
-                    $res = $client->get($apiUrl . 'major/' . $version . '/release/latest');
-                    if ($res->getStatusCode() === 200 && $res->getHeader('content-type')[0] === 'application/json') {
-                        $release = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-                        $releases[$version] = $release;
-                    }
-                }
-            }
+        $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
+        if ($major == 6) {
+            $major = substr($projectVersion, 0, 3);
         }
-
-        return $releases;
+        $apiUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'typo3Url');
+        return $this->getLatestTypo3ReleaseCall($apiUrl, $major);
     }
 
     /**
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws GuzzleException
      * @throws JsonException
      */
-    public function getLatestTypo3Release(string $version): array
+    public function getLatestTypo3ReleaseCall(string $apiUrl, string $major)
     {
         $release = [];
-
-        $apiUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'typo3Url');
-
-        $client = new Client();
-        $res = $client->get($apiUrl . 'major/' . $version . '/release/latest');
-        if ($res->getStatusCode() === 200 && $res->getHeader('content-type')[0] === 'application/json') {
-            $release = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        if ($apiUrl && $major) {
+            $client = new Client();
+            $res = $client->get($apiUrl . 'major/' . $major . '/release/latest');
+            if ($res->getStatusCode() === 200 && $res->getHeader('content-type')[0] === 'application/json') {
+                $release = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+            }
         }
-
         return $release;
     }
 
@@ -94,23 +71,38 @@ class ApiService implements LoggerAwareInterface
      */
     public function projectVersion(array $project): string
     {
+        $version = '';
         $apiUser = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['code711_housekeeping']['REST_API_USER'];
         $apiPw = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['code711_housekeeping']['REST_API_PW'];
-
-        $client = new Client();
-        $res = $client->request('get', $project['url'] . 'api/v1/version', ['auth' => [$apiUser, $apiPw]]);
-
-        if ($res->getStatusCode() === 200 && (
-                $res->getHeader('content-type')[0] === 'application/json'
-                || $res->getHeader('content-type')[0] === 'application/json; charset=utf-8'
-            )) {
-            $result = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-            $this->logger->info('report ' . $project['url'] . 'api/v1/version', $result);
-            if (!empty($result['version'])) {
-                return $result['version'];
+        if (!empty($project['url'])) {
+            $version = $this->projectVersionCall($project['url'], $apiUser, $apiPw);
+            if ($version) {
+                $this->logger->info('report ' . $project['url'] . 'api/v1/version', $version);
+            } else {
+                $this->logger->error('can not access ' . $project['url'] . 'api/v1/version');
             }
-        } else {
-            $this->logger->error('can not access ' . $project['url'] . 'api/v1/version');
+        }
+        return $version;
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws JsonException
+     */
+    public function projectVersionCall(string $url, string $apiUser, string $apiPw): string
+    {
+        if ($url && $apiUser && $apiPw) {
+            $client = new Client();
+            $res = $client->request('get', $url . 'api/v1/version', ['auth' => [$apiUser, $apiPw]]);
+            if ($res->getStatusCode() === 200 && (
+                    $res->getHeader('content-type')[0] === 'application/json'
+                    || $res->getHeader('content-type')[0] === 'application/json; charset=utf-8'
+                )) {
+                $result = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+                if (!empty($result['version'])) {
+                    return $result['version'];
+                }
+            }
         }
         return '';
     }

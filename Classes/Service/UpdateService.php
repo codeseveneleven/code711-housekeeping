@@ -26,8 +26,8 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class UpdateService implements LoggerAwareInterface
 {
@@ -65,21 +65,18 @@ class UpdateService implements LoggerAwareInterface
 
             if ($projectVersion) {
 
-                $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
-                if ($major == 6) {
-                    $major = substr($projectVersion, 0, 3);
-                }
-
                 $latestRelease = '';
                 try {
-                    $latestRelease = $typo3VersionChecker->getLatestTypo3Release($major);
+                    $latestRelease = $typo3VersionChecker->getLatestTypo3Release($projectVersion);
                     $this->logger->info('fetching latest release');
                 } catch (GuzzleException|\JsonException $e) {
                     $this->logger->error($e->getCode() . ': ' . $e->getMessage());
                 }
 
-                if (!empty($latestRelease)) {
-                    $severity = $this->checkSeverity($major, $projectVersion, $latestRelease);
+                if (!empty($latestRelease['version']) && !empty($latestRelease['type'])) {
+
+                    $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping');
+                    $severity = $this->checkSeverity($projectVersion, $latestRelease['version'], $latestRelease['type'], $settings);
 
                     $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_code711housekeeping_domain_model_project');
                     /** @var Statement $stmt */
@@ -99,24 +96,19 @@ class UpdateService implements LoggerAwareInterface
         }
     }
 
-    /**
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     */
-    private function checkSeverity(string $major, string $projectVersion, array $latestRelease): string
+    public function checkSeverity(string $projectVersion, string $latestVersion, string $latestType, array $settings): string
     {
-        $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping');
-
+        $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
         if (in_array($major, GeneralUtility::trimExplode(',', $settings['redVersions']))) {
             return 'bg-red';
         }
         if (in_array($major, GeneralUtility::trimExplode(',', $settings['orangeVersions']))) {
             return 'bg-orange';
         }
-        if ($projectVersion === $latestRelease['version']) {
+        if ($projectVersion === $latestVersion) {
             return 'bg-green';
         }
-        if ($latestRelease['type'] === 'security') {
+        if ($latestType === 'security') {
             return 'bg-xdarkred';
         }
         return 'bg-orange';

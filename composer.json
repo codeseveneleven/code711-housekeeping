@@ -18,6 +18,11 @@
 			"Code711\\Code711Housekeeping\\": "Classes/"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"Code711\\Code711Housekeeping\\Tests\\": "Tests/"
+		}
+	},
 	"extra": {
 		"typo3/cms": {
 			"extension-key": "code711_housekeeping"

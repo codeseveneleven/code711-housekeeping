@@ -4,9 +4,6 @@ typo3Url = https://get.typo3.org/v1/api/
 # cat=basic/002; type=string; label=Projects API URL
 projectsUrl = api/v1/
 
-# cat=basic/003; type=string; label=Check down to version
-minVersion = 8
-
 # cat=basic/004; type=string; label=Versions mark orange
 orangeVersions = 10
 
