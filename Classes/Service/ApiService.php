@@ -77,7 +77,7 @@ class ApiService implements LoggerAwareInterface
         if (!empty($project['url'])) {
             $version = $this->projectVersionCall($project['url'], $apiUser, $apiPw);
             if ($version) {
-                $this->logger->info('report ' . $project['url'] . 'api/v1/version', $version);
+                $this->logger->info('report ' . $project['url'] . 'api/v1/version', [$version]);
             } else {
                 $this->logger->error('can not access ' . $project['url'] . 'api/v1/version');
             }
