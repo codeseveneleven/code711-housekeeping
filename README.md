@@ -88,3 +88,8 @@ Using option groups you are able to pick projects of a special group.
 
 ### Sorting
 All project fields are **sortable** for dashboard view. Has to be `fieldname order` each.
+
+## Troubleshooting
+On some server configurations, in order for the authorisation headers to work, you will need to add this to .htaccess:
+````yml
+SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0

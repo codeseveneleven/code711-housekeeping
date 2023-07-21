@@ -1,5 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/*
+ * This file is part of the TYPO3 project.
+ * (c) 2023 B-Factor GmbH
+ *          Sudhaus7
+ *          12bis3
+ *          Code711.de
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ * The TYPO3 project - inspiring people to share!
+ * @copyright https://code711.de/
+ *
+ */
 
 namespace Code711\Code711Housekeeping\Test\Unit\Service;
 
@@ -18,7 +33,7 @@ class UpdateServiceTest extends BaseTestCase
         $settings = ['redVersions' => '6,7,8,9', 'orangeVersions' => '10'];
         $updateService = new UpdateService();
         $result = $updateService->checkSeverity($given[0], $given[1], $given[2], $settings);
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     public function checkSeverityDataProvider(): array

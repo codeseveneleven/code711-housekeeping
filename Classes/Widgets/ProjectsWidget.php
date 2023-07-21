@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2022 B-Factor GmbH / 12bis3 / Sudhaus7 / code711.de
+ * (c) 2023 B-Factor GmbH
+ *          Sudhaus7
+ *          12bis3
+ *          Code711.de
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  * The TYPO3 project - inspiring people to share!
+ * @copyright https://code711.de/
  *
- * @copyright 2022 B-Factor GmbH / 12bis3 / Sudhaus7 / https://code711.de/
  */
 
 namespace Code711\Code711Housekeeping\Widgets;
@@ -24,7 +27,6 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Dashboard\Widgets\AdditionalCssInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
@@ -107,5 +109,4 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
     {
         return $this->options;
     }
-
 }

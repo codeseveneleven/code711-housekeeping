@@ -1,5 +1,20 @@
 <?php
+
 declare(strict_types=1);
+
+/*
+ * This file is part of the TYPO3 project.
+ * (c) 2023 B-Factor GmbH
+ *          Sudhaus7
+ *          12bis3
+ *          Code711.de
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ * The TYPO3 project - inspiring people to share!
+ * @copyright https://code711.de/
+ *
+ */
 
 namespace Code711\Code711Housekeeping\Test\Unit\Service;
 
@@ -8,7 +23,6 @@ use TYPO3\TestingFramework\Core\BaseTestCase;
 
 class ApiServiceTest extends BaseTestCase
 {
-
     /**
      * @test
      *
@@ -18,7 +32,7 @@ class ApiServiceTest extends BaseTestCase
     {
         $typo3VersionChecker = new ApiService();
         $result = $typo3VersionChecker->getLatestTypo3ReleaseCall('https://get.typo3.org/v1/api/', $given);
-        $this->assertMatchesRegularExpression($expected, $result['version'] ?? '');
+        self::assertMatchesRegularExpression($expected, $result['version'] ?? '');
     }
 
     /**
@@ -69,9 +83,9 @@ class ApiServiceTest extends BaseTestCase
         $typo3VersionChecker = new ApiService();
         $result = $typo3VersionChecker->projectVersionCall($given, 'BasicSecured', '3QT{7b~?5l10)oCK}NNx');
         if ($result) {
-            $this->assertMatchesRegularExpression($expected, $result);
+            self::assertMatchesRegularExpression($expected, $result);
         } else {
-            $this->assertEmpty($result);
+            self::assertEmpty($result);
         }
     }
 

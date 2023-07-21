@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2022 12bis3
+ * (c) 2023 B-Factor GmbH
+ *          Sudhaus7
+ *          12bis3
+ *          Code711.de
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  * The TYPO3 project - inspiring people to share!
- * @copyright 2022 12bis3 https://12bis3.de/
+ * @copyright https://code711.de/
  *
  */
 
 namespace Code711\Code711Housekeeping\Service;
 
 use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Statement;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerAwareInterface;
@@ -27,11 +29,9 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class UpdateService implements LoggerAwareInterface
 {
-
     use LoggerAwareTrait;
 
     protected ProjectRepository $projectRepository;
@@ -42,14 +42,12 @@ class UpdateService implements LoggerAwareInterface
     }
 
     /**
-     * @throws DBALException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function updateProject(int $id, array $record): void
     {
         if ($id && !empty($record['url'])) {
-
             $typo3VersionChecker = GeneralUtility::makeInstance(ApiService::class);
             $typo3VersionChecker->setLogger($this->logger);
 
@@ -64,7 +62,6 @@ class UpdateService implements LoggerAwareInterface
             }
 
             if ($projectVersion) {
-
                 $latestRelease = '';
                 try {
                     $latestRelease = $typo3VersionChecker->getLatestTypo3Release($projectVersion);
@@ -74,7 +71,6 @@ class UpdateService implements LoggerAwareInterface
                 }
 
                 if (!empty($latestRelease['version']) && !empty($latestRelease['type'])) {
-
                     $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping');
                     $severity = $this->checkSeverity($projectVersion, $latestRelease['version'], $latestRelease['type'], $settings);
 
@@ -86,11 +82,7 @@ class UpdateService implements LoggerAwareInterface
                         ->set('version', $projectVersion)
                         ->set('type', $latestRelease['type'])
                         ->set('elts', (int)$latestRelease['elts'])
-                        ->set('severity', $severity)
-                        ->where(
-                            $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($id, Connection::PARAM_INT))
-                        )
-                        ->execute();
+                        ->set('severity', $severity)->where($queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($id, Connection::PARAM_INT)))->executeStatement();
                 }
             }
         }

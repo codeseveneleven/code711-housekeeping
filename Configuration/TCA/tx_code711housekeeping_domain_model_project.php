@@ -2,13 +2,16 @@
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2022 B-Factor GmbH / 12bis3 / Sudhaus7 / code711.de
+ * (c) 2023 B-Factor GmbH
+ *          Sudhaus7
+ *          12bis3
+ *          Code711.de
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  * The TYPO3 project - inspiring people to share!
+ * @copyright https://code711.de/
  *
- * @copyright 2022 B-Factor GmbH / 12bis3 / Sudhaus7 / https://code711.de/
  */
 
 return [
@@ -19,7 +22,6 @@ return [
         'label_alt_force' => true,
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'sortby' => 'sorting',
         'delete' => 'deleted',
         'enablecolumns' => [
@@ -34,7 +36,7 @@ return [
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, url, version, latest, type, elts, severity,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.group, group,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden
-            '
+            ',
         ],
     ],
     'palettes' => [
@@ -91,7 +93,7 @@ return [
             'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.elts',
             'config' => [
                 'type' => 'check',
-                'default' => 0
+                'default' => 0,
             ],
         ],
         'severity' => [

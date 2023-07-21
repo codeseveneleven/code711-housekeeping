@@ -2,13 +2,16 @@
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2022 B-Factor GmbH / 12bis3 / Sudhaus7 / code711.de
+ * (c) 2023 B-Factor GmbH
+ *          Sudhaus7
+ *          12bis3
+ *          Code711.de
  *
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  * The TYPO3 project - inspiring people to share!
+ * @copyright https://code711.de/
  *
- * @copyright 2022 B-Factor GmbH / 12bis3 / Sudhaus7 / https://code711.de/
  */
 
 $EM_CONF[$_EXTKEY] = [
@@ -19,7 +22,7 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'p.ottmar@12bis3.de',
     'author_company' => '12bis3',
     'state' => 'beta',
-    'version' => '2.1.1',
+    'version' => '3.0.0',
     'constraints' => [
         'depends' => [],
         'conflicts' => [],

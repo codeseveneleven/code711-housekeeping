@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2022 B-Factor GmbH
+ * (c) 2023 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -20,9 +20,9 @@ namespace Code711\Code711Housekeeping\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use JsonException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use JsonException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -95,9 +95,9 @@ class ApiService implements LoggerAwareInterface
             $client = new Client();
             $res = $client->request('get', $url . 'api/v1/version', ['auth' => [$apiUser, $apiPw]]);
             if ($res->getStatusCode() === 200 && (
-                    $res->getHeader('content-type')[0] === 'application/json'
-                    || $res->getHeader('content-type')[0] === 'application/json; charset=utf-8'
-                )) {
+                $res->getHeader('content-type')[0] === 'application/json'
+                || $res->getHeader('content-type')[0] === 'application/json; charset=utf-8'
+            )) {
                 $result = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
                 if (!empty($result['version'])) {
                     return $result['version'];
