@@ -18,89 +18,97 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Service;
 
+use Code711\Code711Housekeeping\Domain\Model\Project;
+use Code711\Code711Housekeeping\Domain\Model\Release;
 use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
-use Doctrine\DBAL\Statement;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class UpdateService implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    protected ProjectRepository $projectRepository;
+    protected ?ProjectRepository $projectRepository = null;
 
-    public function injectProjectRepository(ProjectRepository $projectRepository): void
-    {
-        $this->projectRepository = $projectRepository;
-    }
+    protected string $orangeVersions = '';
+
+    protected string $redVersions = '';
 
     /**
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public function updateProject(int $id, array $record): void
+    public function __construct()
     {
-        if ($id && !empty($record['url'])) {
-            $typo3VersionChecker = GeneralUtility::makeInstance(ApiService::class);
-            $typo3VersionChecker->setLogger($this->logger);
+        $this->orangeVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'orangeVersions');
+        $this->redVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'redVersions');
+        $this->projectRepository = GeneralUtility::makeInstance(ProjectRepository::class);
 
-            $projectVersion = $record['version'];
-            try {
-                $checkedVersion = $typo3VersionChecker->projectVersion($record);
-                if ($checkedVersion) {
-                    $projectVersion = $checkedVersion;
-                }
-            } catch (GuzzleException|\JsonException $e) {
-                $this->logger->error($e->getCode() . ': ' . $e->getMessage());
-            }
-
-            if ($projectVersion) {
-                $latestRelease = '';
-                try {
-                    $latestRelease = $typo3VersionChecker->getLatestTypo3Release($projectVersion);
-                    $this->logger->info('fetching latest release');
-                } catch (GuzzleException|\JsonException $e) {
-                    $this->logger->error($e->getCode() . ': ' . $e->getMessage());
-                }
-
-                if (!empty($latestRelease['version']) && !empty($latestRelease['type'])) {
-                    $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping');
-                    $severity = $this->checkSeverity($projectVersion, $latestRelease['version'], $latestRelease['type'], $settings);
-
-                    $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_code711housekeeping_domain_model_project');
-                    /** @var Statement $stmt */
-                    $queryBuilder
-                        ->update('tx_code711housekeeping_domain_model_project')
-                        ->set('latest', $latestRelease['version'])
-                        ->set('version', $projectVersion)
-                        ->set('type', $latestRelease['type'])
-                        ->set('elts', (int)$latestRelease['elts'])
-                        ->set('severity', $severity)->where($queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($id, Connection::PARAM_INT)))->executeStatement();
-                }
-            }
+        if (empty($this->orangeVersions) || empty($this->redVersions)) {
+            throw new \InvalidArgumentException('Config missing', 1677369373);
         }
     }
 
-    public function checkSeverity(string $projectVersion, string $latestVersion, string $latestType, array $settings): string
+    /**
+     * @throws GuzzleException
+     * @throws \JsonException
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
+     */
+    public function updateProject(int $id): void
+    {
+        $project = $this->projectRepository->findByUid($id);
+
+        if ($project instanceof Project) {
+
+            if ($project->getGiturl()) {
+                $this->logger->info('fetching latest project release');
+                $gitApiService = GeneralUtility::makeInstance(GitApiService::class);
+                $project = $gitApiService->getProjectRelease($project);
+            }
+
+            $this->logger->info('fetching latest typo3 release');
+            $typo3ApiService = GeneralUtility::makeInstance(Typo3ApiService::class);
+            $latestRelease = $typo3ApiService->getLatestTypo3Release($project->getVersion());
+
+            if ($latestRelease) {
+                $project->setLatest($latestRelease->getVersion());
+                $project->setElts($latestRelease->isElts());
+                $project->setType($latestRelease->getType());
+                $severity = $this->checkSeverity($project->getVersion(), $latestRelease);
+                $project->setSeverity($severity);
+            }
+
+            $this->projectRepository->update($project);
+            $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
+            $persistenceManager->persistAll();
+
+        }
+    }
+
+    public function checkSeverity(string $projectVersion, Release $latestVersion): string
     {
         $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
-        if (in_array($major, GeneralUtility::trimExplode(',', $settings['redVersions']))) {
+
+        if (in_array($major, GeneralUtility::trimExplode(',', $this->redVersions))) {
             return 'bg-red';
         }
-        if (in_array($major, GeneralUtility::trimExplode(',', $settings['orangeVersions']))) {
+        if (in_array($major, GeneralUtility::trimExplode(',', $this->orangeVersions))) {
             return 'bg-orange';
         }
-        if ($projectVersion === $latestVersion) {
+        if ($projectVersion === $latestVersion->getVersion()) {
             return 'bg-green';
         }
-        if ($latestType === 'security') {
+        if ($latestVersion->getType() === 'security') {
             return 'bg-xdarkred';
         }
         return 'bg-orange';

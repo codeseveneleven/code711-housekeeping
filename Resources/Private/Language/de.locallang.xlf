@@ -13,7 +13,10 @@
 				<target>URL</target>
 			</trans-unit>
 			<trans-unit id="project.version">
-				<target>Version (manuelle Eingabe für TYPO3-Version kleiner 11 oder wenn Projekt nicht prüfbar)</target>
+				<target>Version</target>
+			</trans-unit>
+			<trans-unit id="project.version.description">
+				<target>Manuelle Eingabe wenn Projekt nicht prüfbar</target>
 			</trans-unit>
 			<trans-unit id="project.latest">
 				<target>Latest</target>
@@ -30,8 +33,20 @@
 			<trans-unit id="project.group">
 				<target>Gruppe</target>
 			</trans-unit>
-			<trans-unit id="group.code">
-				<source>Code</source>
+			<trans-unit id="project.group.description">
+				<target>Gruppierung im Dashboard</target>
+			</trans-unit>
+			<trans-unit id="project.giturl">
+				<target>GIT Projekt URI</target>
+			</trans-unit>
+			<trans-unit id="project.giturl.description">
+				<target>https://[githost]/[group]/[project]</target>
+			</trans-unit>
+			<trans-unit id="project.gittoken">
+				<target>GIT Personal Access Token</target>
+			</trans-unit>
+			<trans-unit id="project.gittoken.description">
+				<target>Wenn nicht gesetzt, wird Wert aus Extension Einstellungen verwendet</target>
 			</trans-unit>
 
 			<trans-unit id="group">
@@ -40,9 +55,15 @@
 			<trans-unit id="group.title">
 				<target>Titel</target>
 			</trans-unit>
+			<trans-unit id="group.code">
+				<target>Code</target>
+			</trans-unit>
 
-			<trans-unit id="project.tab.group">
-				<target>Gruppe</target>
+			<trans-unit id="project.tab.project">
+				<target>Projekt</target>
+			</trans-unit>
+			<trans-unit id="project.tab.typo3">
+				<target>Release TYPO3</target>
 			</trans-unit>
 
 			<trans-unit id="widgets.projects.title">

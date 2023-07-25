@@ -20,15 +20,13 @@ namespace Code711\Code711Housekeeping\Hooks;
 
 use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
 use Code711\Code711Housekeeping\Service\UpdateService;
-use Doctrine\DBAL\DBALException;
 use GuzzleHttp\Exception\GuzzleException;
+use JsonException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use TYPO3\CMS\Core\Exception;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 
 class DatamapPostProcess implements LoggerAwareInterface
 {
@@ -42,7 +40,10 @@ class DatamapPostProcess implements LoggerAwareInterface
     }
 
     /**
-     * @throws Exception
+     * @throws GuzzleException
+     * @throws JsonException
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
      */
     public function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $pObj): void
     {
@@ -53,20 +54,8 @@ class DatamapPostProcess implements LoggerAwareInterface
             }
             $updateService = GeneralUtility::makeInstance(UpdateService::class);
             $updateService->setLogger($this->logger);
-            try {
-                $updateService->updateProject((int)$newid, $pObj->datamap[$table][$id]);
-            } catch (GuzzleException|DBALException $e) {
-                $flashMessage = GeneralUtility::makeInstance(
-                    FlashMessage::class,
-                    $e->getMessage(),
-                    (string)$e->getCode(),
-                    AbstractMessage::ERROR,
-                    true
-                );
-                $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
-                $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
-                $defaultFlashMessageQueue->enqueue($flashMessage);
-            }
+
+            $updateService->updateProject((int)$newid);
         }
     }
 }

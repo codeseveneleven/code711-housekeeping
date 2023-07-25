@@ -13,7 +13,7 @@
 				<source>URL</source>
 			</trans-unit>
 			<trans-unit id="project.version">
-				<source>Version (add manually for TYPO3 less 11 or project not checkable)</source>
+				<source>Version (add manually when project not checkable)</source>
 			</trans-unit>
 			<trans-unit id="project.latest">
 				<source>Latest</source>
@@ -30,6 +30,21 @@
 			<trans-unit id="project.group">
 				<source>Group</source>
 			</trans-unit>
+			<trans-unit id="project.group.description">
+				<source>Group in Dashboard</source>
+			</trans-unit>
+			<trans-unit id="project.giturl">
+				<source>GIT project URI</source>
+			</trans-unit>
+			<trans-unit id="project.giturl.description">
+				<source>https://[githost]/[group]/[project]</source>
+			</trans-unit>
+			<trans-unit id="project.gittoken">
+				<source>GIT Personal Access Token</source>
+			</trans-unit>
+			<trans-unit id="project.gittoken.description">
+				<source>When not set, global token from extension setting is used</source>
+			</trans-unit>
 
 			<trans-unit id="group">
 				<source>Housekeeping: Group</source>
@@ -41,8 +56,11 @@
 				<source>Code</source>
 			</trans-unit>
 
-			<trans-unit id="project.tab.group">
-				<source>Group</source>
+			<trans-unit id="project.tab.project">
+				<source>Project</source>
+			</trans-unit>
+			<trans-unit id="project.tab.typo3">
+				<source>Release TYPO3</source>
 			</trans-unit>
 
 			<trans-unit id="widgets.projects.title">

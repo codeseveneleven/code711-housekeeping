@@ -33,8 +33,9 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, url, version, latest, type, elts, severity,
-                --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.group, group,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, group, giturl, gittoken, url,
+                --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.project, version, severity,
+                --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.typo3, latest, type, elts,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden
             ',
         ],
@@ -67,6 +68,7 @@ return [
         ],
         'version' => [
             'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.version',
+            'description' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.version.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -113,6 +115,7 @@ return [
         ],
         'group' => [
             'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.group',
+            'description' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.group.description',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -121,6 +124,24 @@ return [
                 ],
                 'foreign_table' => 'tx_code711housekeeping_domain_model_group',
                 'default' => 0,
+            ],
+        ],
+        'giturl' => [
+            'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.giturl',
+            'description' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.giturl.description',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
+        'gittoken' => [
+            'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.gittoken',
+            'description' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.gittoken.description',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
             ],
         ],
     ],

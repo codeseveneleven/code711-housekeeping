@@ -7,7 +7,9 @@ CREATE TABLE tx_code711housekeeping_domain_model_project
 	type     varchar(255) DEFAULT '' NOT NULL,
 	elts     int(2) DEFAULT 0 NOT NULL,
 	severity varchar(255) DEFAULT '' NOT NULL,
-	group    varchar(255) DEFAULT '' NOT NULL
+	group    varchar(255) DEFAULT '' NOT NULL,
+    giturl   varchar(255) DEFAULT '' NOT NULL,
+    gittoken varchar(255) DEFAULT '' NOT NULL
 );
 
 CREATE TABLE tx_code711housekeeping_domain_model_group

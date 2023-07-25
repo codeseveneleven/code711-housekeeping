@@ -38,6 +38,10 @@ class Project extends AbstractEntity
 
     protected ?Group $group = null;
 
+    protected string $giturl = '';
+
+    protected string $gittoken = '';
+
     /**
      * @return string
      */
@@ -164,5 +168,37 @@ class Project extends AbstractEntity
     public function setGroup(?Group $group): void
     {
         $this->group = $group;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiturl(): string
+    {
+        return $this->giturl;
+    }
+
+    /**
+     * @param string $giturl
+     */
+    public function setGiturl(string $giturl): void
+    {
+        $this->giturl = $giturl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGittoken(): string
+    {
+        return $this->gittoken;
+    }
+
+    /**
+     * @param string $gittoken
+     */
+    public function setGittoken(string $gittoken): void
+    {
+        $this->gittoken = $gittoken;
     }
 }
