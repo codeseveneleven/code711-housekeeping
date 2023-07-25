@@ -2,6 +2,9 @@
 
 Keep track of your TYPO3 versions.
 
+**Note that this version no longer supports API calls with the code711_api extension. Use the 2.x version instead which 
+is also available for TYPO3 12.x.**
+
 You need for this:
 
 * Install extension code711_housekeeping
@@ -14,12 +17,6 @@ Install it via `composer req code711/code711-housekeeping`.
 
 Activate the extension.
 
-Add credentials in AdditionalConfiguration.php:
-````
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['code711_housekeeping']['REST_API_USER'] = 'MySecureUser';
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['code711_housekeeping']['REST_API_PW'] = 'gdhsg7773b7z$§"V66678v';
-````
-
 ## Groups and projects
 
 Add a new record `Housekeeping: Project` in list module.
@@ -27,13 +24,15 @@ Add a new record `Housekeeping: Project` in list module.
 |  Field | Purpose                                    | Example             | Auto update |
 |---|--------------------------------------------|---------------------|-------------|
 |  title | Displays in dashboard                      | My project          | no          |
-| url  | Needed for auto update                     | https://example.org | no          |
-| version  | Current project version                    | 11.5.24             | yes         |
-| latest | Current TYPO3 Version (for major of above) | 11.5.25             | yes         |
-| type | type of last relase                        | security            | yes         |
-| elts | last relase is elts                        | 1                   | yes         |
+| url  | Only needed as preview                     | https://example.org | no          |
+| giturl | To check against your git | https://[githost]/[group]/[project] | no |
+| gittoken | Personal access token | xxx | no |
+| version  | Current project version                    | 12.4.4             | yes         |
+| latest | Current TYPO3 Version (for major of above) | 12.4.4             | yes         |
+| type | type of last release                       | security            | yes         |
+| elts | last release is elts                       | 1                   | yes         |
 | severity | color class in dashboard                   | bg-green            | yes  |
-| group | optional group                             | My group        | no |
+| group | optional group                             | My group            | no |
 
 Optionally you can also add one or more `Housekeeping: Group` to group your projects in different responsibilities or views.
 
@@ -47,8 +46,7 @@ Optionally you can also add one or more `Housekeeping: Group` to group your proj
 With this feature it is possible to fetch the fields marked in the above table when saving a project record.
 
 **Auto update is available when**:
-* TYPO3 version of target project is higher then 11
-* Target project has [code711_api](https://packagist.org/packages/code711/code711-api) installed and configured
+* You have a GIT repository with personal access token available
 
 ## Configure dashboard
 
@@ -88,8 +86,3 @@ Using option groups you are able to pick projects of a special group.
 
 ### Sorting
 All project fields are **sortable** for dashboard view. Has to be `fieldname order` each.
-
-## Troubleshooting
-On some server configurations, in order for the authorisation headers to work, you will need to add this to .htaccess:
-````yml
-SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
