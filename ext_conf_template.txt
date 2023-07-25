@@ -11,4 +11,4 @@ orangeVersions = 10
 redVersions = 8,9
 
 # cat=basic/006; type=string; label=GIT Auth Token
-http_auth_token = glpat-m6uV7Uau7P3CGFYcFfKV
+http_auth_token =
