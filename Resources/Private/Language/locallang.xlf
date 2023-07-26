@@ -77,6 +77,9 @@
 			<trans-unit id="package.version">
 				<source>Version</source>
 			</trans-unit>
+			<trans-unit id="package.latest">
+				<source>Latest</source>
+			</trans-unit>
 
 			<trans-unit id="project.tab.project">
 				<source>Project</source>

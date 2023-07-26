@@ -81,6 +81,9 @@
 			<trans-unit id="package.version">
 				<target>Version</target>
 			</trans-unit>
+			<trans-unit id="package.latest">
+				<target>Latest</target>
+			</trans-unit>
 
 			<trans-unit id="project.tab.project">
 				<target>Projekt</target>

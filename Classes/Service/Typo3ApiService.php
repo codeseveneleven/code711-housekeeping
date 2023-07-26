@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Service;
 
-use BaconQrCode\Exception\RuntimeException;
 use Code711\Code711Housekeeping\Domain\Model\Release;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -49,7 +48,6 @@ class Typo3ApiService implements LoggerAwareInterface
     }
 
     /**
-     * @throws GuzzleException
      * @throws JsonException
      */
     public function getLatestTypo3Release(string $projectVersion): bool|Release

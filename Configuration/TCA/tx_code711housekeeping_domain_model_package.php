@@ -18,11 +18,11 @@ return [
     'ctrl' => [
         'title'	=> 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:package',
         'label' => 'title',
-        'label_alt' => 'version',
+        'label_alt' => 'version, latest',
         'label_alt_force' => true,
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'sortby' => 'sorting',
+        'default_sortby' => 'title',
         'delete' => 'deleted',
         'enablecolumns' => [
             'disabled' => 'hidden',
@@ -34,7 +34,7 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, version,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, version, latest,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden
             ',
         ],
@@ -59,6 +59,14 @@ return [
         ],
         'version' => [
             'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:package.version',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
+        'latest' => [
+            'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:package.latest',
             'config' => [
                 'type' => 'input',
                 'size' => 30,

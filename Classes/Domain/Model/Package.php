@@ -26,6 +26,8 @@ class Package extends AbstractEntity
 
     protected string $version = '';
 
+    protected string $latest = '';
+
     /**
      * @return string
      */
@@ -56,5 +58,21 @@ class Package extends AbstractEntity
     public function setVersion(string $version): void
     {
         $this->version = $version;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLatest(): string
+    {
+        return $this->latest;
+    }
+
+    /**
+     * @param string $latest
+     */
+    public function setLatest(string $latest): void
+    {
+        $this->latest = $latest;
     }
 }

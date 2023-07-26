@@ -21,6 +21,7 @@ namespace Code711\Code711Housekeeping\Service;
 use Code711\Code711Housekeeping\Domain\Model\Package;
 use Code711\Code711Housekeeping\Domain\Model\Project;
 use Gitlab\Client;
+use JsonException;
 use RuntimeException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -49,6 +50,9 @@ class GitApiService
         }
     }
 
+    /**
+     * @throws JsonException
+     */
     public function getProjectRelease(Project $project): Project
     {
         $this->giturl = $project->getGiturl();
@@ -74,9 +78,17 @@ class GitApiService
                     $project->setVersion(trim($item->version, 'v'));
                 }
                 if ($item->type === 'typo3-cms-extension' && !$project->hasPackage($item->name)) {
+
                     $package = new Package();
                     $package->setTitle($item->name);
                     $package->setVersion($item->version);
+
+                    $packagistApiService = GeneralUtility::makeInstance(PackagistApiService::class);
+                    $packageLatest = $packagistApiService->getPackageVersion($item->name);
+                    if ($packageLatest) {
+                        $package->setLatest($packageLatest);
+                    }
+
                     $project->addPackage($package);
                 }
             }

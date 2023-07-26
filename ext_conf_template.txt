@@ -1,7 +1,10 @@
 # cat=basic/001; type=string; label=TYPO3 API URL
 typo3Url = https://get.typo3.org/v1/api/
 
-# cat=basic/002; type=string; label=Projects API URL
+# cat=basic/002; type=string; label=Packagist API URL
+packagistUrl = https://repo.packagist.org/p2/
+
+# cat=basic/003; type=string; label=Projects API URL
 projectsUrl = api/v1/
 
 # cat=basic/004; type=string; label=Versions mark orange
@@ -13,5 +16,5 @@ redVersions = 8,9
 # cat=basic/006; type=string; label=GIT Auth Token
 http_auth_token =
 
-# cat=basic/006; type=string; label=GIT default branch
+# cat=basic/007; type=string; label=GIT default branch
 defaultBranch = master

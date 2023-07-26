@@ -26,6 +26,7 @@ CREATE TABLE tx_code711housekeeping_domain_model_package
 (
     title       varchar(255) DEFAULT '' NOT NULL,
     version     varchar(255) DEFAULT '' NOT NULL,
+    latest      varchar(255) DEFAULT '' NOT NULL,
     parentid    int(11) DEFAULT 0 NOT NULL,
     parenttable varchar(255) DEFAULT '' NOT NULL
 );
