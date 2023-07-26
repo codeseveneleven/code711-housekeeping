@@ -32,6 +32,8 @@ class GitApiService
 
     protected string $gitToken = '';
 
+    protected string $defaultBranch = '';
+
     /**
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
@@ -39,6 +41,8 @@ class GitApiService
     public function __construct()
     {
         $this->gitToken = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'http_auth_token');
+        $this->defaultBranch = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'defaultBranch');
+
         if (!$this->gitToken) {
             throw new \InvalidArgumentException('Config missing', 1677369373);
         }
@@ -49,6 +53,9 @@ class GitApiService
         $this->giturl = $project->getGiturl();
         if ($project->getGittoken()) {
             $this->gitToken = $project->getGittoken();
+        }
+        if ($project->getGitbranch()) {
+            $this->defaultBranch = $project->getGitbranch();
         }
 
         $file = $this->readComposerLock();
@@ -68,7 +75,7 @@ class GitApiService
     {
         $client = $this->connect();
         try {
-            $file = $client->repositoryFiles()->getRawFile($this->getProject(), 'composer.lock', 'master');
+            $file = $client->repositoryFiles()->getRawFile($this->getProject(), 'composer.lock', $this->defaultBranch);
             return json_decode($file);
         } catch (RuntimeException $e) {
             return false;

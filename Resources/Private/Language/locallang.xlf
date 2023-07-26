@@ -45,6 +45,12 @@
 			<trans-unit id="project.gittoken.description">
 				<source>When not set, global token from extension setting is used</source>
 			</trans-unit>
+			<trans-unit id="project.gitbranch">
+				<source>GIT Branch</source>
+			</trans-unit>
+			<trans-unit id="project.gitbranch.description">
+				<source>Default is master</source>
+			</trans-unit>
 
 			<trans-unit id="group">
 				<source>Housekeeping: Group</source>

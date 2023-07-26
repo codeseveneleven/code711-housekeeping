@@ -33,7 +33,7 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, group, giturl, gittoken, url,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, group, giturl, gittoken, gitbranch, url,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.project, version, severity,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.typo3, latest, type, elts,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden
@@ -138,6 +138,14 @@ return [
         'gittoken' => [
             'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.gittoken',
             'description' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.gittoken.description',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
+        'gitbranch' => [
+            'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.gitbranch',
             'config' => [
                 'type' => 'input',
                 'size' => 30,

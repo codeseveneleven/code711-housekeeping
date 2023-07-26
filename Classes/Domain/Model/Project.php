@@ -42,6 +42,8 @@ class Project extends AbstractEntity
 
     protected string $gittoken = '';
 
+    protected string $gitbranch = '';
+
     /**
      * @return string
      */
@@ -200,5 +202,21 @@ class Project extends AbstractEntity
     public function setGittoken(string $gittoken): void
     {
         $this->gittoken = $gittoken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGitbranch(): string
+    {
+        return $this->gitbranch;
+    }
+
+    /**
+     * @param string $gitbranch
+     */
+    public function setGitbranch(string $gitbranch): void
+    {
+        $this->gitbranch = $gitbranch;
     }
 }

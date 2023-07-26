@@ -48,6 +48,12 @@
 			<trans-unit id="project.gittoken.description">
 				<target>Wenn nicht gesetzt, wird Wert aus Extension Einstellungen verwendet</target>
 			</trans-unit>
+			<trans-unit id="project.gitbranch">
+				<target>GIT Branch</target>
+			</trans-unit>
+			<trans-unit id="project.gitbranch.description">
+				<target>Default ist master</target>
+			</trans-unit>
 
 			<trans-unit id="group">
 				<target>Housekeeping: Gruppe</target>
