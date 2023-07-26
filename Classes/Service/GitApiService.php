@@ -51,6 +51,9 @@ class GitApiService
     public function getProjectRelease(Project $project): Project
     {
         $this->giturl = $project->getGiturl();
+        if ($project->getGroup()->getGittoken()) {
+            $this->gitToken = $project->getGroup()->getGittoken();
+        }
         if ($project->getGittoken()) {
             $this->gitToken = $project->getGittoken();
         }

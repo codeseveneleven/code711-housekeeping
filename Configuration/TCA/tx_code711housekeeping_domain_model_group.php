@@ -31,7 +31,7 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, code,
+                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, code, gittoken,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden
             ',
         ],
@@ -56,6 +56,15 @@ return [
         ],
         'code' => [
             'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:group.code',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
+        'gittoken' => [
+            'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.gittoken',
+            'description' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.gittoken.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,

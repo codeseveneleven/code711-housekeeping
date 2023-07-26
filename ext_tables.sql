@@ -15,6 +15,7 @@ CREATE TABLE tx_code711housekeeping_domain_model_project
 
 CREATE TABLE tx_code711housekeeping_domain_model_group
 (
-    title varchar(255) DEFAULT '' NOT NULL,
-    code  varchar(255) DEFAULT '' NOT NULL
+    title    varchar(255) DEFAULT '' NOT NULL,
+    code     varchar(255) DEFAULT '' NOT NULL,
+    gittoken varchar(255) DEFAULT '' NOT NULL
 );

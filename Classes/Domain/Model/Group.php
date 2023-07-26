@@ -24,6 +24,8 @@ class Group extends AbstractEntity
 {
     protected string $title = '';
 
+    protected string $gittoken = '';
+
     /**
      * @return string
      */
@@ -38,5 +40,21 @@ class Group extends AbstractEntity
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGittoken(): string
+    {
+        return $this->gittoken;
+    }
+
+    /**
+     * @param string $gittoken
+     */
+    public function setGittoken(string $gittoken): void
+    {
+        $this->gittoken = $gittoken;
     }
 }
