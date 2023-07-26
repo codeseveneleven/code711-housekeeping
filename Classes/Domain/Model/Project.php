@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Code711\Code711Housekeeping\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class Project extends AbstractEntity
 {
@@ -45,6 +46,16 @@ class Project extends AbstractEntity
     protected string $gitbranch = '';
 
     protected string $php = '';
+
+    /**
+     * @var ObjectStorage<Package>|null
+     */
+    protected ?ObjectStorage $packages = null;
+
+    public function __construct()
+    {
+        $this->packages = new ObjectStorage();
+    }
 
     /**
      * @return string
@@ -236,5 +247,41 @@ class Project extends AbstractEntity
     public function setPhp(string $php): void
     {
         $this->php = $php;
+    }
+
+    /**
+     * @return ObjectStorage|null
+     */
+    public function getPackages(): ?ObjectStorage
+    {
+        return $this->packages;
+    }
+
+    /**
+     * @param ObjectStorage|null $packages
+     */
+    public function setPackages(?ObjectStorage $packages): void
+    {
+        $this->packages = $packages;
+    }
+
+    /**
+     * @param Package $package
+     * @return void
+     */
+    public function addPackage(Package $package): void
+    {
+        $this->packages->attach($package);
+    }
+
+    public function hasPackage(string $name): bool
+    {
+        $packages = $this->packages;
+        foreach ($packages as $package) {
+            if ($package->getTitle() === $name) {
+                return true;
+            }
+        }
+        return false;
     }
 }

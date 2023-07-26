@@ -36,6 +36,7 @@ return [
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, group, giturl, gittoken, gitbranch, url,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.project, version, php, severity,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.typo3, latest, type, elts,
+                --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.packages, packages,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden
             ',
         ],
@@ -159,6 +160,21 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
+            ],
+        ],
+        'packages' => [
+            'label' => 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.packages',
+            'config' => [
+                'type' => 'inline',
+                'foreign_table' => 'tx_code711housekeeping_domain_model_package',
+                'foreign_field' => 'parentid',
+                'foreign_table_field' => 'parenttable',
+                'appearance' => [
+                    'showSynchronizationLink' => true,
+                    'showAllLocalizationLink' => true,
+                    'showPossibleLocalizationRecords' => true,
+                ],
+                'default' => 0,
             ],
         ],
     ],

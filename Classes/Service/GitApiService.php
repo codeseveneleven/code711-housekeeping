@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Service;
 
+use Code711\Code711Housekeeping\Domain\Model\Package;
 use Code711\Code711Housekeeping\Domain\Model\Project;
 use Gitlab\Client;
 use RuntimeException;
@@ -63,14 +64,20 @@ class GitApiService
 
         $file = $this->readComposerLock();
         if ($file) {
-            foreach ($file->packages as $package) {
-                if ($package->name === 'typo3/cms-core') {
-                    $project->setVersion(trim($package->version, 'v'));
-                }
-            }
             foreach ($file as $key => $value) {
                 if ($key === 'platform-overrides') {
                     $project->setPhp($value->php);
+                }
+            }
+            foreach ($file->packages as $item) {
+                if ($item->name === 'typo3/cms-core') {
+                    $project->setVersion(trim($item->version, 'v'));
+                }
+                if ($item->type === 'typo3-cms-extension' && !$project->hasPackage($item->name)) {
+                    $package = new Package();
+                    $package->setTitle($item->name);
+                    $package->setVersion($item->version);
+                    $project->addPackage($package);
                 }
             }
         }

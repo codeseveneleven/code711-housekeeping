@@ -54,6 +54,9 @@
 			<trans-unit id="project.php">
 				<source>PHP Version</source>
 			</trans-unit>
+			<trans-unit id="project.packages">
+				<source>Installed extensions</source>
+			</trans-unit>
 
 			<trans-unit id="group">
 				<source>Housekeeping: Group</source>
@@ -65,11 +68,24 @@
 				<source>Code</source>
 			</trans-unit>
 
+			<trans-unit id="package">
+				<source>Housekeeping: Paket</source>
+			</trans-unit>
+			<trans-unit id="package.title">
+				<source>Titel</source>
+			</trans-unit>
+			<trans-unit id="package.version">
+				<source>Version</source>
+			</trans-unit>
+
 			<trans-unit id="project.tab.project">
 				<source>Project</source>
 			</trans-unit>
 			<trans-unit id="project.tab.typo3">
 				<source>Release TYPO3</source>
+			</trans-unit>
+			<trans-unit id="project.tab.packages">
+				<source>Extensions</source>
 			</trans-unit>
 
 			<trans-unit id="widgets.projects.title">
