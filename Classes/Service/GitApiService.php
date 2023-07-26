@@ -63,10 +63,14 @@ class GitApiService
 
         $file = $this->readComposerLock();
         if ($file) {
-            $packages = $file->packages;
-            foreach ($packages as $package) {
+            foreach ($file->packages as $package) {
                 if ($package->name === 'typo3/cms-core') {
                     $project->setVersion(trim($package->version, 'v'));
+                }
+            }
+            foreach ($file as $key => $value) {
+                if ($key === 'platform-overrides') {
+                    $project->setPhp($value->php);
                 }
             }
         }

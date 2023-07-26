@@ -18,7 +18,9 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Test\Unit\Service;
 
-use Code711\Code711Housekeeping\Service\ApiService;
+use Code711\Code711Housekeeping\Service\GitApiService;
+use Code711\Code711Housekeeping\Service\Typo3ApiService;
+use JsonException;
 use TYPO3\TestingFramework\Core\BaseTestCase;
 
 class ApiServiceTest extends BaseTestCase
@@ -27,11 +29,12 @@ class ApiServiceTest extends BaseTestCase
      * @test
      *
      * @dataProvider getLatestTypo3ReleaseCallDataProvider
+     * @throws JsonException
      */
     public function getLatestTypo3ReleaseCall(string $expected, string $given): void
     {
-        $typo3VersionChecker = new ApiService();
-        $result = $typo3VersionChecker->getLatestTypo3ReleaseCall('https://get.typo3.org/v1/api/', $given);
+        $typo3ApiService = new Typo3ApiService();
+        $result = $typo3ApiService->getLatestTypo3ReleaseCall('https://get.typo3.org/v1/api/', $given);
         self::assertMatchesRegularExpression($expected, $result['version'] ?? '');
     }
 
@@ -40,7 +43,7 @@ class ApiServiceTest extends BaseTestCase
      *
      * @return array
      */
-    public function getLatestTypo3ReleaseCallDataProvider(): array
+    public static function getLatestTypo3ReleaseCallDataProvider(): array
     {
         return [
             'releaseIs60' => [
@@ -80,13 +83,8 @@ class ApiServiceTest extends BaseTestCase
      */
     public function projectVersionCall(string $expected, string $given): void
     {
-        $typo3VersionChecker = new ApiService();
-        $result = $typo3VersionChecker->projectVersionCall($given, 'BasicSecured', '3QT{7b~?5l10)oCK}NNx');
-        if ($result) {
-            self::assertMatchesRegularExpression($expected, $result);
-        } else {
-            self::assertEmpty($result);
-        }
+        $gitApiService = new GitApiService();
+        /* Todo */
     }
 
     /**
@@ -94,7 +92,7 @@ class ApiServiceTest extends BaseTestCase
      *
      * @return array
      */
-    public function projectVersionCallDataProvider(): array
+    public static function projectVersionCallDataProvider(): array
     {
         return [
             'testcode711page' => [

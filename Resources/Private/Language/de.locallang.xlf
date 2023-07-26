@@ -54,6 +54,9 @@
 			<trans-unit id="project.gitbranch.description">
 				<target>Default ist master</target>
 			</trans-unit>
+			<trans-unit id="project.php">
+				<target>PHP Version</target>
+			</trans-unit>
 
 			<trans-unit id="group">
 				<target>Housekeeping: Gruppe</target>

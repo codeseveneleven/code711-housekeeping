@@ -36,7 +36,7 @@ class UpdateServiceTest extends BaseTestCase
         self::assertEquals($expected, $result);
     }
 
-    public function checkSeverityDataProvider(): array
+    public static function checkSeverityDataProvider(): array
     {
         return [
             'redsimple' => [

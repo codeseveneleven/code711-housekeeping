@@ -10,7 +10,8 @@ CREATE TABLE tx_code711housekeeping_domain_model_project
     group     varchar(255) DEFAULT '' NOT NULL,
     giturl    varchar(255) DEFAULT '' NOT NULL,
     gittoken  varchar(255) DEFAULT '' NOT NULL,
-    gitbranch varchar(255) DEFAULT '' NOT NULL
+    gitbranch varchar(255) DEFAULT '' NOT NULL,
+    php       varchar(255) DEFAULT '' NOT NULL
 );
 
 CREATE TABLE tx_code711housekeeping_domain_model_group

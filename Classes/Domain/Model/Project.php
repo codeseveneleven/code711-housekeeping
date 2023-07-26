@@ -44,6 +44,8 @@ class Project extends AbstractEntity
 
     protected string $gitbranch = '';
 
+    protected string $php = '';
+
     /**
      * @return string
      */
@@ -218,5 +220,21 @@ class Project extends AbstractEntity
     public function setGitbranch(string $gitbranch): void
     {
         $this->gitbranch = $gitbranch;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhp(): string
+    {
+        return $this->php;
+    }
+
+    /**
+     * @param string $php
+     */
+    public function setPhp(string $php): void
+    {
+        $this->php = $php;
     }
 }
