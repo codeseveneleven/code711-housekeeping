@@ -22,10 +22,14 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'p.ottmar@12bis3.de',
     'author_company' => '12bis3',
     'state' => 'beta',
-    'version' => '3.3.0',
+    'version' => '3.3.1',
     'constraints' => [
-        'depends' => [],
-        'conflicts' => [],
-        'suggests' => [],
+	    'depends' => [
+		    'typo3' => '12.0.0-12.4.99',
+	    ],
+	    'conflicts' => [
+	    ],
+	    'suggests' => [
+	    ],
     ],
 ];
