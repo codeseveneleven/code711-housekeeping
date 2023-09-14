@@ -1,6 +1,12 @@
 # Code711 Housekeeping
 
-Keep track of your TYPO3 versions.
+[![Latest Stable Version](https://poser.pugx.org/code711/code711-housekeeping/v/stable.svg)](https://extensions.typo3.org/extension/code711_housekeeping/)
+[![TYPO3 12](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/12)
+[![TYPO3 11](https://img.shields.io/badge/TYPO3-11-orange.svg)](https://get.typo3.org/version/11)
+[![Total Downloads](https://poser.pugx.org/code711/code711-housekeeping/d/total.svg)](https://packagist.org/packages/code711/code711-housekeeping)
+[![Monthly Downloads](https://poser.pugx.org/code711/code711-housekeeping/d/monthly)](https://packagist.org/packages/code711/code711-housekeeping)
+
+Keep track of your TYPO3 versions by checking your git-repositories (gitlab for now). You can then see the results on your TYPO3 Dashboard. It is of course checked against the currently available latest TYPO3 version, keeping you updated on what needs to be updated.
 
 **Note that this version no longer supports API calls with the code711_api extension. Use the 2.x version instead which 
 is also available for TYPO3 12.x.**
