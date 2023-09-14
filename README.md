@@ -2,7 +2,6 @@
 
 [![Latest Stable Version](https://poser.pugx.org/code711/code711-housekeeping/v/stable.svg)](https://extensions.typo3.org/extension/code711_housekeeping/)
 [![TYPO3 12](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/12)
-[![TYPO3 11](https://img.shields.io/badge/TYPO3-11-orange.svg)](https://get.typo3.org/version/11)
 [![Total Downloads](https://poser.pugx.org/code711/code711-housekeeping/d/total.svg)](https://packagist.org/packages/code711/code711-housekeeping)
 [![Monthly Downloads](https://poser.pugx.org/code711/code711-housekeeping/d/monthly)](https://packagist.org/packages/code711/code711-housekeeping)
 
