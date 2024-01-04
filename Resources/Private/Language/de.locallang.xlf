@@ -95,11 +95,57 @@
 				<target>Extensions</target>
 			</trans-unit>
 
+			<trans-unit id="widget_group.housekeeping">
+				<target>Housekeeping</target>
+			</trans-unit>
+
+			<trans-unit id="widget.projects.project">
+				<target>Projekt</target>
+			</trans-unit>
+			<trans-unit id="widget.projects.version">
+				<target>Version</target>
+			</trans-unit>
+			<trans-unit id="widget.projects.latest">
+				<target>Latest</target>
+			</trans-unit>
+			<trans-unit id="widget.projects.type">
+				<target>Typ</target>
+			</trans-unit>
+			<trans-unit id="widget.projects.elts">
+				<target>ELTS verfügbar</target>
+			</trans-unit>
+			<trans-unit id="widget.projects.notchecked">
+				<target>Nicht geprüft!</target>
+			</trans-unit>
+			<trans-unit id="widget.projects.yes">
+				<target>Ja</target>
+			</trans-unit>
+			<trans-unit id="widget.projects.no">
+				<target>Nein</target>
+			</trans-unit>
+
+			<trans-unit id="widget.phpversions.project">
+				<target>Projekt</target>
+			</trans-unit>
+			<trans-unit id="widget.phpversions.version">
+				<target>Version</target>
+			</trans-unit>
+			<trans-unit id="widget.phpversions.notchecked">
+				<target>n.a.</target>
+			</trans-unit>
+
 			<trans-unit id="widgets.projects.title">
-				<target>Meine Projekte</target>
+				<target>Meine TYPO3 Versionen</target>
 			</trans-unit>
 			<trans-unit id="widgets.projects.description">
-				<target>Listet Projekte mit Versionen</target>
+				<target>Listet Projekte nach TYPO3 Version</target>
+			</trans-unit>
+
+			<trans-unit id="widgets.phpversions.title">
+				<target>Meine PHP Versionen</target>
+			</trans-unit>
+			<trans-unit id="widgets.phpversions.description">
+				<target>Listet Projekte nach PHP Version</target>
 			</trans-unit>
 		</body>
 	</file>

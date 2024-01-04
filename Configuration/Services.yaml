@@ -27,9 +27,27 @@ services:
     tags:
       - name: dashboard.widget
         identifier: 'projects'
-        groupNames: 'general'
+        groupNames: 'housekeeping'
         title: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.projects.title'
         description: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.projects.description'
         iconIdentifier: 'content-widget-text'
         height: 'large'
-        width: 'large'
+        width: 'medium'
+  dashboard.widget.phpversions:
+    class: 'Code711\Code711Housekeeping\Widgets\PhpVersionsWidget'
+    arguments:
+      $view: '@dashboard.views.widget'
+      $options:
+        groups:
+        sorting:
+          - 'php asc'
+          - 'title asc'
+    tags:
+      - name: dashboard.widget
+        identifier: 'phpversions'
+        groupNames: 'housekeeping'
+        title: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.phpversions.title'
+        description: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.phpversions.description'
+        iconIdentifier: 'content-widget-text'
+        height: 'large'
+        width: 'small'

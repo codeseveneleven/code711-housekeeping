@@ -28,7 +28,7 @@ use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
+class PhpVersionsWidget implements WidgetInterface, AdditionalCssInterface
 {
     public function __construct(
         private WidgetConfigurationInterface $configuration,
@@ -49,7 +49,7 @@ class ProjectsWidget implements WidgetInterface, AdditionalCssInterface
             'items' => $this->getItems(),
             'configuration' => $this->configuration,
         ]);
-        return $this->view->render('ProjectsWidget');
+        return $this->view->render('PhpVersionsWidget');
     }
 
     /**

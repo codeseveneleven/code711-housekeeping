@@ -7,39 +7,40 @@
     <div class="widget-table-wrapper">
         <table class="widget-table">
             <tr>
-                <th><strong>Project</strong></th>
-                <th><strong>Version</strong></th>
-                <th><strong>Latest</strong></th>
-                <th><strong>Type</strong></th>
-                <th><strong>ELTS available</strong></th>
-                <th><strong>URL</strong></th>
-                <th><strong>PHP Version</strong></th>
+                <th><strong>{f:translate(key: 'widget.projects.project', extensionName: 'code711_housekeeping')}</strong></th>
+                <th><strong>{f:translate(key: 'widget.projects.version', extensionName: 'code711_housekeeping')}</strong></th>
+                <th><strong>{f:translate(key: 'widget.projects.latest', extensionName: 'code711_housekeeping')}</strong></th>
+                <th><strong>{f:translate(key: 'widget.projects.type', extensionName: 'code711_housekeeping')}</strong></th>
+                <th><strong>{f:translate(key: 'widget.projects.elts', extensionName: 'code711_housekeeping')}</strong></th>
             </tr>
             <f:for each="{items}" as="item">
                 <tr>
-                    <td>{item.title}</td>
+                    <td>
+                        <f:link.external uri="{item.url}" target="_blank" rel="noreferrer">
+                            {item.title}
+                        </f:link.external>
+                    </td>
                     <f:if condition="{item.version}">
                         <f:then>
                             <td class="{item.severity}">
-                                TYPO3 {item.version}
+                                {item.version}
                             </td>
-                            <td>TYPO3 {item.latest}</td>
+                            <td>{item.latest}</td>
                             <td>{item.type}</td>
-                            <td>{f:if(condition: '{item.elts}', then: 'yes', else: 'no')}</td>
+                            <td>
+                                <f:if condition="{item.elts}">
+                                    <f:then>{f:translate(key: 'widget.projects.yes', extensionName: 'code711_housekeeping')}</f:then>
+                                    <f:else>{f:translate(key: 'widget.projects.no', extensionName: 'code711_housekeeping')}</f:else>
+                                </f:if>
+                            </td>
                         </f:then>
                         <f:else>
-                            <td>Not checked!</td>
-                            <td>Not checked!</td>
-                            <td>Not checked!</td>
-                            <td>Not checked!</td>
+                            <td>{f:translate(key: 'widget.projects.notchecked', extensionName: 'code711_housekeeping')}</td>
+                            <td>{f:translate(key: 'widget.projects.notchecked', extensionName: 'code711_housekeeping')}</td>
+                            <td>{f:translate(key: 'widget.projects.notchecked', extensionName: 'code711_housekeeping')}</td>
+                            <td>{f:translate(key: 'widget.projects.notchecked', extensionName: 'code711_housekeeping')}</td>
                         </f:else>
                     </f:if>
-                    <td>
-                        <f:link.external uri="{item.url}" target="_blank" rel="noreferrer">
-                            <strong>{item.url}</strong>
-                        </f:link.external>
-                    </td>
-                    <td>{item.php}</td>
                 </tr>
             </f:for>
         </table>
