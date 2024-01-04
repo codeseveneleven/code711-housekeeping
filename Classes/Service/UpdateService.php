@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2023 B-Factor GmbH
+ * (c) 2024 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -68,7 +68,6 @@ class UpdateService implements LoggerAwareInterface
         $project = $this->projectRepository->findByUid($id);
 
         if ($project instanceof Project) {
-
             if ($project->getGiturl()) {
                 $this->logger->info('fetching latest project release');
                 $gitApiService = GeneralUtility::makeInstance(GitApiService::class);
@@ -90,7 +89,6 @@ class UpdateService implements LoggerAwareInterface
             $this->projectRepository->update($project);
             $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
             $persistenceManager->persistAll();
-
         }
     }
 

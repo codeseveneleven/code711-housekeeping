@@ -2,7 +2,7 @@
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2023 B-Factor GmbH
+ * (c) 2024 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -105,11 +105,11 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['Not checked', ''],
-                    ['Green', 'bg-green'],
-                    ['Orange', 'bg-orange'],
-                    ['Red', 'bg-red'],
-                    ['Dark red', 'bg-xdarkred'],
+                    ['label' => 'Not checked', 'value' => ''],
+                    ['label' => 'Green', 'value' => 'bg-green'],
+                    ['label' => 'Orange', 'value' => 'bg-orange'],
+                    ['label' => 'Red', 'value' => 'bg-red'],
+                    ['label' => 'Dark red', 'value' => 'bg-xdarkred'],
                 ],
                 'default' => '',
             ],
@@ -121,7 +121,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_code711housekeeping_domain_model_group',
                 'default' => 0,

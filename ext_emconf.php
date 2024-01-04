@@ -2,7 +2,7 @@
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2023 B-Factor GmbH
+ * (c) 2024 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -24,12 +24,12 @@ $EM_CONF[$_EXTKEY] = [
     'state' => 'stable',
     'version' => '3.3.3',
     'constraints' => [
-	    'depends' => [
-		    'typo3' => '12.0.0-12.4.99',
-	    ],
-	    'conflicts' => [
-	    ],
-	    'suggests' => [
-	    ],
+        'depends' => [
+            'typo3' => '12.0.0-12.4.99',
+        ],
+        'conflicts' => [
+        ],
+        'suggests' => [
+        ],
     ],
 ];

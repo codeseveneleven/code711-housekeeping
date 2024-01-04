@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2023 B-Factor GmbH
+ * (c) 2024 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -27,7 +27,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PackagistApiService
 {
-
     protected string $packagistUrl = '';
 
     /**
@@ -53,9 +52,7 @@ class PackagistApiService
         if ($res->getStatusCode() === 200 && $res->getHeader('content-type')[0] === 'application/json') {
             $result = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
             return $result['packages'][$package][0]['version'];
-        } else {
-            return false;
         }
+            return false;
     }
-
 }
