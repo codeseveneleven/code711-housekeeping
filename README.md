@@ -91,3 +91,5 @@ Using option groups you are able to pick projects of a special group.
 
 ### Sorting
 All project fields are **sortable** for dashboard view. Has to be `fieldname order` each.
+
+## Changelog
