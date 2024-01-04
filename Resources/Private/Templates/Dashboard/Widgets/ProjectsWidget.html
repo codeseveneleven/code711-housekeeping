@@ -11,8 +11,9 @@
                 <th><strong>Version</strong></th>
                 <th><strong>Latest</strong></th>
                 <th><strong>Type</strong></th>
-                <th><strong>ELTS</strong></th>
+                <th><strong>ELTS available</strong></th>
                 <th><strong>URL</strong></th>
+                <th><strong>PHP Version</strong></th>
             </tr>
             <f:for each="{items}" as="item">
                 <tr>
@@ -38,6 +39,7 @@
                             <strong>{item.url}</strong>
                         </f:link.external>
                     </td>
+                    <td>{item.php}</td>
                 </tr>
             </f:for>
         </table>
