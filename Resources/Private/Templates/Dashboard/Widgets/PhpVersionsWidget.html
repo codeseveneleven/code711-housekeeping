@@ -12,7 +12,11 @@
             </tr>
             <f:for each="{items}" as="item">
                 <tr>
-                    <td>{item.title}</td>
+                    <td>
+                        <f:link.external uri="{item.url}" target="_blank" rel="noreferrer">
+                            {item.title}
+                        </f:link.external>
+                    </td>
                     <f:if condition="{item.php}">
                         <f:then>
                             <td>{item.php}</td>

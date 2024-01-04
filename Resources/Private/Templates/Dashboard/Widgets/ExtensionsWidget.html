@@ -1,0 +1,53 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:layout name="Widget/Widget" />
+
+<f:section name="main">
+    <div class="widget-table-wrapper code711-housekeeping">
+        <table class="widget-table">
+            <tr>
+                <th><strong>{f:translate(key: 'widget.extensions.project', extensionName: 'code711_housekeeping')}</strong></th>
+                <th><strong>{f:translate(key: 'widget.extensions.packages', extensionName: 'code711_housekeeping')}</strong></th>
+                <th><strong>{f:translate(key: 'widget.extensions.version', extensionName: 'code711_housekeeping')}</strong></th>
+                <th><strong>{f:translate(key: 'widget.extensions.latest', extensionName: 'code711_housekeeping')}</strong></th>
+            </tr>
+            <f:for each="{items}" as="item">
+                <f:if condition="{item.packages}">
+                    <tr>
+                        <td>
+                            <f:link.external uri="{item.project_url}" target="_blank" rel="noreferrer">
+                                {item.project_title}
+                            </f:link.external>
+                        </td>
+                        <td>
+                            <f:for as="package" each="{item.packages}">
+                                {package.title}<br />
+                            </f:for>
+                        </td>
+                        <td>
+                            <f:for as="package" each="{item.packages}">
+                                {package.version}<br />
+                            </f:for>
+                        </td>
+                        <td>
+                            <f:for as="package" each="{item.packages}">
+                                <f:if condition="{package.latest}">
+                                    <f:then>
+                                        <span class="{f:if(condition: '{package.latest} && {package.latest} != {package.version}', then: 'bg-orange', else: 'bg-green')}">
+                                            {package.latest}
+                                        </span>
+                                    </f:then>
+                                    <f:else>{f:translate(key: 'widget.phpversions.notchecked', extensionName: 'code711_housekeeping')}</f:else>
+                                </f:if>
+                                <br />
+                            </f:for>
+                        </td>
+                    </tr>
+                </f:if>
+            </f:for>
+        </table>
+    </div>
+</f:section>
+
+</html>

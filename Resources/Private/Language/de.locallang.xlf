@@ -134,6 +134,19 @@
 				<target>n.a.</target>
 			</trans-unit>
 
+			<trans-unit id="widget.extensions.project">
+				<target>Projekt</target>
+			</trans-unit>
+			<trans-unit id="widget.extensions.packages">
+				<target>Packages</target>
+			</trans-unit>
+			<trans-unit id="widget.extensions.version">
+				<target>Version</target>
+			</trans-unit>
+			<trans-unit id="widget.extensions.latest">
+				<target>Latest</target>
+			</trans-unit>
+
 			<trans-unit id="widgets.projects.title">
 				<target>Meine TYPO3 Versionen</target>
 			</trans-unit>
@@ -146,6 +159,13 @@
 			</trans-unit>
 			<trans-unit id="widgets.phpversions.description">
 				<target>Listet Projekte nach PHP Version</target>
+			</trans-unit>
+
+			<trans-unit id="widgets.extensions.title">
+				<target>Meine Extensions</target>
+			</trans-unit>
+			<trans-unit id="widgets.extensions.description">
+				<target>Listet Extensions der Projekte</target>
 			</trans-unit>
 		</body>
 	</file>

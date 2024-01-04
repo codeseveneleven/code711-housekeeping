@@ -51,3 +51,20 @@ services:
         iconIdentifier: 'content-widget-text'
         height: 'large'
         width: 'small'
+  dashboard.widget.extensions:
+    class: 'Code711\Code711Housekeeping\Widgets\ExtensionsWidget'
+    arguments:
+      $view: '@dashboard.views.widget'
+      $options:
+        groups:
+        sorting:
+          - 'title asc'
+    tags:
+      - name: dashboard.widget
+        identifier: 'extensions'
+        groupNames: 'housekeeping'
+        title: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.extensions.title'
+        description: 'LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:widgets.extensions.description'
+        iconIdentifier: 'content-widget-text'
+        height: 'large'
+        width: 'medium'

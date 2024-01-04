@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+.bg-green {
+    background-color: green;
+    color: white;
+}
+
+.bg-orange {
+    background-color: orange;
+    color: white;
+}
+
+.bg-red {
+    background-color: red;
+    color: white;
+}
+
+.bg-xdarkred {
+    background-color: darkred;
+    color: white;
+}
+
+.code711-housekeeping dl {
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0
+}
+.code711-housekeeping dt {
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0;
+    font-weight: normal;
+}
+.code711-housekeeping dd {
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0
+}

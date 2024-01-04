@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Widgets;
 
+use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
 use Doctrine\DBAL\Connection as ConnectionAlias;
 use Doctrine\DBAL\Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -26,14 +27,15 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Dashboard\Widgets\AdditionalCssInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class PhpVersionsWidget implements WidgetInterface, AdditionalCssInterface
+class ExtensionsWidget implements WidgetInterface, AdditionalCssInterface
 {
     public function __construct(
         private WidgetConfigurationInterface $configuration,
         protected ?StandaloneView $view = null,
-        private array $options = []
+        private array $options = [],
     ) {
         if (VersionNumberUtility::getNumericTypo3Version() < 12) {
             $this->setOptions($this->options);
@@ -42,6 +44,7 @@ class PhpVersionsWidget implements WidgetInterface, AdditionalCssInterface
 
     /**
      * @throws Exception
+     * @throws InvalidQueryException
      */
     public function renderWidgetContent(): string
     {
@@ -49,13 +52,47 @@ class PhpVersionsWidget implements WidgetInterface, AdditionalCssInterface
             'items' => $this->getItems(),
             'configuration' => $this->configuration,
         ]);
-        return $this->view->render('PhpVersionsWidget');
+        return $this->view->render('ExtensionsWidget');
     }
 
     /**
      * @throws Exception
      */
     public function getItems(): array
+    {
+        $items = [];
+        $projects = $this->getProjects();
+        foreach ($projects as $project) {
+            $items[] = [
+                'project_title' => $project['title'],
+                'project_url' => $project['url'],
+                'packages' => $this->getPackages($project['uid']),
+            ];
+        }
+        return $items;
+    }
+
+    public function getCssFiles(): array
+    {
+        return [
+            'EXT:code711_housekeeping/Resources/Public/Css/ExtensionWidget.css',
+        ];
+    }
+
+    public function setOptions(array $options): void
+    {
+        $this->options = $options;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getProjects(): array
     {
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
         $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_code711housekeeping_domain_model_project');
@@ -89,18 +126,20 @@ class PhpVersionsWidget implements WidgetInterface, AdditionalCssInterface
         return $queryBuilder->executeQuery()->fetchAllAssociative();
     }
 
-    public function getCssFiles(): array
+    /**
+     * @throws Exception
+     */
+    private function getPackages(int $parent): array
     {
-        return [];
-    }
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable('tx_code711housekeeping_domain_model_package');
+        $queryBuilder
+            ->select('*')
+            ->from('tx_code711housekeeping_domain_model_package')
+            ->where(
+                $queryBuilder->expr()->eq('parentid', $queryBuilder->createNamedParameter($parent))
+            );
 
-    public function setOptions(array $options): void
-    {
-        $this->options = $options;
-    }
-
-    public function getOptions(): array
-    {
-        return $this->options;
+        return $queryBuilder->executeQuery()->fetchAllAssociative();
     }
 }
