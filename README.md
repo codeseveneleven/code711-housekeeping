@@ -93,3 +93,10 @@ Using option groups you are able to pick projects of a special group.
 All project fields are **sortable** for dashboard view. Has to be `fieldname order` each.
 
 ## Changelog
+
+### 3.4.0
+* [FEATURE] add new widget for extensions
+* [FEATURE] add new widgets php version
+* [TASK] update licence header
+* [TASK] add licence + update readme
+* [FEATURE] add php version to dashboard
