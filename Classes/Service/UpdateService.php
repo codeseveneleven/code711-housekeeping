@@ -18,10 +18,10 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Service;
 
+use Code711\Code711Housekeeping\Domain\Model\Package;
 use Code711\Code711Housekeeping\Domain\Model\Project;
-use Code711\Code711Housekeeping\Domain\Model\Release;
+use Code711\Code711Housekeeping\Domain\Model\Typo3Release;
 use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -36,11 +36,38 @@ class UpdateService implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    protected ?ProjectRepository $projectRepository = null;
+    protected ProjectRepository $projectRepository;
+
+    protected PersistenceManager $persistenceManager;
+
+    protected ExtensionConfiguration $extensionConfiguration;
+
+    protected string $gitToken = '';
+
+    protected string $defaultBranch = '';
 
     protected string $orangeVersions = '';
 
     protected string $redVersions = '';
+
+    protected string $apiUrl = '';
+
+    protected string $packagistUrl = '';
+
+    public function injectProjectRepository(ProjectRepository $projectRepository): void
+    {
+        $this->projectRepository = $projectRepository;
+    }
+
+    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
+
+    public function injectExtensionConfiguration(ExtensionConfiguration $extensionConfiguration): void
+    {
+        $this->extensionConfiguration = $extensionConfiguration;
+    }
 
     /**
      * @throws ExtensionConfigurationExtensionNotConfiguredException
@@ -48,9 +75,14 @@ class UpdateService implements LoggerAwareInterface
      */
     public function __construct()
     {
+        $this->gitToken = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'http_auth_token');
+        $this->defaultBranch = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'defaultBranch');
+
         $this->orangeVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'orangeVersions');
         $this->redVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'redVersions');
-        $this->projectRepository = GeneralUtility::makeInstance(ProjectRepository::class);
+
+        $this->apiUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'typo3Url');
+        $this->packagistUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'packagistUrl');
 
         if (empty($this->orangeVersions) || empty($this->redVersions)) {
             throw new \InvalidArgumentException('Config missing', 1677369373);
@@ -58,10 +90,9 @@ class UpdateService implements LoggerAwareInterface
     }
 
     /**
-     * @throws GuzzleException
-     * @throws \JsonException
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
+     * @throws \JsonException
      */
     public function updateProject(int $id): void
     {
@@ -70,29 +101,59 @@ class UpdateService implements LoggerAwareInterface
         if ($project instanceof Project) {
             if ($project->getGiturl()) {
                 $this->logger->info('fetching latest project release');
-                $gitApiService = GeneralUtility::makeInstance(GitApiService::class);
-                $project = $gitApiService->getProjectRelease($project);
+
+                if ($project->getGroup()->getGittoken()) {
+                    $this->gitToken = $project->getGroup()->getGittoken();
+                } else if ($project->getGittoken()) {
+                    $this->gitToken = $project->getGittoken();
+                }
+                if ($project->getGitbranch()) {
+                    $this->defaultBranch = $project->getGitbranch();
+                }
+
+                $gitApiService = new GitApiService($this->gitToken, $this->defaultBranch, $project->getGiturl());
+                $projectRelease = $gitApiService->getProjectRelease();
+
+                $project->setVersion($projectRelease->getVersion());
+                $project->setPhp($projectRelease->getPhp());
+                $project->setPackages($projectRelease->getPackages());
+
+                $this->logger->info('fetching latest package releases');
+
+                /** @var Package $package */
+                foreach ($project->getPackages() as $package) {
+                    $packagistApiService = new PackagistApiService($this->packagistUrl);
+                    $packageLatest = $packagistApiService->getPackageVersion($package->getTitle());
+                    if ($packageLatest) {
+                        $package->setLatest($packageLatest);
+                    }
+                }
             }
 
             $this->logger->info('fetching latest typo3 release');
-            $typo3ApiService = GeneralUtility::makeInstance(Typo3ApiService::class);
-            $latestRelease = $typo3ApiService->getLatestTypo3Release($project->getVersion());
 
-            if ($latestRelease) {
-                $project->setLatest($latestRelease->getVersion());
-                $project->setElts($latestRelease->isElts());
-                $project->setType($latestRelease->getType());
-                $severity = $this->checkSeverity($project->getVersion(), $latestRelease);
+            $projectMajorVersion = substr($project->getVersion(), 0, strpos($project->getVersion(), '.'));
+            if ($projectMajorVersion == 6) {
+                $projectMajorVersion = substr($project->getVersion(), 0, 3);
+            }
+
+            $typo3ApiService = new Typo3ApiService($this->apiUrl, $projectMajorVersion);
+            $typo3Release = $typo3ApiService->getLatestTypo3Release();
+
+            if ($typo3Release) {
+                $project->setLatest($typo3Release->getVersion());
+                $project->setElts($typo3Release->isElts());
+                $project->setType($typo3Release->getType());
+                $severity = $this->checkSeverity($project->getVersion(), $typo3Release);
                 $project->setSeverity($severity);
             }
 
             $this->projectRepository->update($project);
-            $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
-            $persistenceManager->persistAll();
+            $this->persistenceManager->persistAll();
         }
     }
 
-    public function checkSeverity(string $projectVersion, Release $latestVersion): string
+    public function checkSeverity(string $projectVersion, Typo3Release $latestVersion): string
     {
         $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
 

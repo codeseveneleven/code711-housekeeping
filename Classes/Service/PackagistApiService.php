@@ -20,22 +20,14 @@ namespace Code711\Code711Housekeeping\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class PackagistApiService
 {
     protected string $packagistUrl = '';
 
-    /**
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     */
-    public function __construct()
+    public function __construct(string $packagistUrl)
     {
-        $this->packagistUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'packagistUrl');
+        $this->packagistUrl = $packagistUrl;
         if (empty($this->packagistUrl)) {
             throw new \InvalidArgumentException('Config missing', 1677369373);
         }

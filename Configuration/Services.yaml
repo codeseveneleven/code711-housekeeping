@@ -7,6 +7,9 @@ services:
   Code711\Code711Housekeeping\:
     resource: '../Classes/*'
 
+  Code711\Code711Housekeeping\Service\UpdateService:
+    public: true
+
   Code711\Code711Housekeeping\Command\UpdateVersionsCommand:
     tags:
       - name: 'console.command'

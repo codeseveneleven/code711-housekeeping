@@ -18,16 +18,12 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Service;
 
-use Code711\Code711Housekeeping\Domain\Model\Release;
+use Code711\Code711Housekeeping\Domain\Model\Typo3Release;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Typo3ApiService implements LoggerAwareInterface
 {
@@ -35,13 +31,12 @@ class Typo3ApiService implements LoggerAwareInterface
 
     protected string $apiUrl = '';
 
-    /**
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     */
-    public function __construct()
+    protected string $projectMajorVersion = '';
+
+    public function __construct(string $apiUrl, string $projectMajorVersion)
     {
-        $this->apiUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'typo3Url');
+        $this->apiUrl = $apiUrl;
+        $this->projectMajorVersion = $projectMajorVersion;
         if (empty($this->apiUrl)) {
             throw new \InvalidArgumentException('Config missing', 1677369373);
         }
@@ -50,28 +45,16 @@ class Typo3ApiService implements LoggerAwareInterface
     /**
      * @throws JsonException
      */
-    public function getLatestTypo3Release(string $projectVersion): bool|Release
+    public function getLatestTypo3Release(): ?Typo3Release
     {
-        $major = substr($projectVersion, 0, strpos($projectVersion, '.'));
-        if ($major == 6) {
-            $major = substr($projectVersion, 0, 3);
-        }
-        return $this->getLatestTypo3ReleaseCall($this->apiUrl, $major);
-    }
+        $release = new Typo3Release();
 
-    /**
-     * @throws JsonException
-     */
-    public function getLatestTypo3ReleaseCall(string $apiUrl, string $major): bool|Release
-    {
-        $release = new Release();
-
-        if ($apiUrl && $major) {
+        if ($this->apiUrl && $this->projectMajorVersion) {
             $client = new Client();
             try {
-                $res = $client->get($apiUrl . 'major/' . $major . '/release/latest');
+                $res = $client->get($this->apiUrl . 'major/' . $this->projectMajorVersion . '/release/latest');
             } catch (GuzzleException $e) {
-                return false;
+                return null;
             }
             if ($res->getStatusCode() === 200 && $res->getHeader('content-type')[0] === 'application/json') {
                 $result = json_decode($res->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
@@ -80,7 +63,7 @@ class Typo3ApiService implements LoggerAwareInterface
                 $release->setElts($result['elts'] ?? false);
                 $release->setVersion($result['version'] ?? '');
             } else {
-                return false;
+                return null;
             }
         }
         return $release;

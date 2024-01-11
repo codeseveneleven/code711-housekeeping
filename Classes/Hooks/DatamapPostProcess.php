@@ -18,9 +18,7 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Hooks;
 
-use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
 use Code711\Code711Housekeeping\Service\UpdateService;
-use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -32,17 +30,9 @@ class DatamapPostProcess implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    protected ProjectRepository $projectRepository;
-
-    public function injectProjectRepository(ProjectRepository $projectRepository): void
-    {
-        $this->projectRepository = $projectRepository;
-    }
-
     /**
-     * @throws GuzzleException
-     * @throws JsonException
      * @throws IllegalObjectTypeException
+     * @throws JsonException
      * @throws UnknownObjectException
      */
     public function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $pObj): void
@@ -54,7 +44,6 @@ class DatamapPostProcess implements LoggerAwareInterface
             }
             $updateService = GeneralUtility::makeInstance(UpdateService::class);
             $updateService->setLogger($this->logger);
-
             $updateService->updateProject((int)$newid);
         }
     }

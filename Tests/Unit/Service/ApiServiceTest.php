@@ -83,7 +83,7 @@ class ApiServiceTest extends BaseTestCase
      */
     public function projectVersionCall(string $expected, string $given): void
     {
-        $gitApiService = new GitApiService();
+        //$gitApiService = new GitApiService();
         /* Todo */
     }
 

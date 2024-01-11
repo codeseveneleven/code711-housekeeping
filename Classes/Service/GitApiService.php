@@ -19,14 +19,10 @@ declare(strict_types=1);
 namespace Code711\Code711Housekeeping\Service;
 
 use Code711\Code711Housekeeping\Domain\Model\Package;
-use Code711\Code711Housekeeping\Domain\Model\Project;
+use Code711\Code711Housekeeping\Domain\Model\ProjectRelease;
 use Gitlab\Client;
 use JsonException;
 use RuntimeException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class GitApiService
 {
@@ -36,15 +32,11 @@ class GitApiService
 
     protected string $defaultBranch = '';
 
-    /**
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     */
-    public function __construct()
+    public function __construct(string $gitToken, string $defaultBranch, string $gitUrl)
     {
-        $this->gitToken = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'http_auth_token');
-        $this->defaultBranch = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'defaultBranch');
-
+        $this->gitToken = $gitToken;
+        $this->defaultBranch = $defaultBranch;
+        $this->giturl = $gitUrl;
         if (!$this->gitToken) {
             throw new \InvalidArgumentException('Config missing', 1677369373);
         }
@@ -53,47 +45,31 @@ class GitApiService
     /**
      * @throws JsonException
      */
-    public function getProjectRelease(Project $project): Project
+    public function getProjectRelease(): ProjectRelease
     {
-        $this->giturl = $project->getGiturl();
-        if ($project->getGroup()->getGittoken()) {
-            $this->gitToken = $project->getGroup()->getGittoken();
-        }
-        if ($project->getGittoken()) {
-            $this->gitToken = $project->getGittoken();
-        }
-        if ($project->getGitbranch()) {
-            $this->defaultBranch = $project->getGitbranch();
-        }
+        $projectRelease =  new ProjectRelease();
 
         $file = $this->readComposerLock();
         if ($file) {
             foreach ($file as $key => $value) {
                 if ($key === 'platform-overrides') {
-                    $project->setPhp($value->php);
+                    $projectRelease->setPhp($value->php);
                 }
             }
             foreach ($file->packages as $item) {
                 if ($item->name === 'typo3/cms-core') {
-                    $project->setVersion(trim($item->version, 'v'));
+                    $projectRelease->setVersion(trim($item->version, 'v'));
                 }
-                if ($item->type === 'typo3-cms-extension' && !$project->hasPackage($item->name)) {
+                if ($item->type === 'typo3-cms-extension' && !$projectRelease->hasPackage($item->name)) {
                     $package = new Package();
                     $package->setTitle($item->name);
                     $package->setVersion($item->version);
-
-                    $packagistApiService = GeneralUtility::makeInstance(PackagistApiService::class);
-                    $packageLatest = $packagistApiService->getPackageVersion($item->name);
-                    if ($packageLatest) {
-                        $package->setLatest($packageLatest);
-                    }
-
-                    $project->addPackage($package);
+                    $projectRelease->addPackage($package);
                 }
             }
         }
 
-        return $project;
+        return $projectRelease;
     }
 
     public function readComposerLock()

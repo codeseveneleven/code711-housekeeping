@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Domain\Model;
 
-class Release
+class Typo3Release
 {
     protected string $version = '';
 
