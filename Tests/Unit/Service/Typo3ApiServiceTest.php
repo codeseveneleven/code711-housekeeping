@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Test\Unit\Service;
 
-use Code711\Code711Housekeeping\Service\GitApiService;
 use Code711\Code711Housekeeping\Service\Typo3ApiService;
 use JsonException;
 use TYPO3\TestingFramework\Core\BaseTestCase;
@@ -28,14 +27,14 @@ class ApiServiceTest extends BaseTestCase
     /**
      * @test
      *
-     * @dataProvider getLatestTypo3ReleaseCallDataProvider
+     * @dataProvider getLatestTypo3ReleaseDataProvider
      * @throws JsonException
      */
-    public function getLatestTypo3ReleaseCall(string $expected, string $given): void
+    public function getLatestTypo3Release(string $expected, string $given): void
     {
-        $typo3ApiService = new Typo3ApiService();
-        $result = $typo3ApiService->getLatestTypo3ReleaseCall('https://get.typo3.org/v1/api/', $given);
-        self::assertMatchesRegularExpression($expected, $result['version'] ?? '');
+        $typo3ApiService = new Typo3ApiService('https://get.typo3.org/v1/api/', $given);
+        $result = $typo3ApiService->getLatestTypo3Release();
+        self::assertMatchesRegularExpression($expected, $result->getVersion() ?? '');
     }
 
     /**
@@ -43,7 +42,7 @@ class ApiServiceTest extends BaseTestCase
      *
      * @return array
      */
-    public static function getLatestTypo3ReleaseCallDataProvider(): array
+    public static function getLatestTypo3ReleaseDataProvider(): array
     {
         return [
             'releaseIs60' => [
@@ -72,34 +71,6 @@ class ApiServiceTest extends BaseTestCase
             ],
             'noInputGiven' => [
                 '//i', '',
-            ],
-        ];
-    }
-
-    /**
-     * @test
-     *
-     * @dataProvider projectVersionCallDataProvider
-     */
-    public function projectVersionCall(string $expected, string $given): void
-    {
-        //$gitApiService = new GitApiService();
-        /* Todo */
-    }
-
-    /**
-     * Data provider
-     *
-     * @return array
-     */
-    public static function projectVersionCallDataProvider(): array
-    {
-        return [
-            'testcode711page' => [
-                '/11\\.5\\.[0-9]+/i', 'https://code711.de/',
-            ],
-            'noInputGiven' => [
-                '', '',
             ],
         ];
     }
