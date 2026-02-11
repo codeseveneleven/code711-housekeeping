@@ -7,7 +7,7 @@
 
 Keep track of your TYPO3 versions by checking your git-repositories (gitlab for now). You can then see the results on your TYPO3 Dashboard. It is of course checked against the currently available latest TYPO3 version, keeping you updated on what needs to be updated.
 
-**Note that this version no longer supports API calls with the code711_api extension. Use the 2.x version instead which 
+**Note that this version no longer supports API calls with the code711_api extension. Use the 2.x version instead which
 is also available for TYPO3 12.x.**
 
 You need for this:
@@ -65,7 +65,6 @@ services:
     dashboard.widget.projects:
         class: 'Code711\Code711Housekeeping\Widgets\ProjectsWidget'
         arguments:
-            $view: '@dashboard.views.widget'
             $options:
                 groups:
                     - mygroupx
@@ -93,6 +92,12 @@ Using option groups you are able to pick projects of a special group.
 All project fields are **sortable** for dashboard view. Has to be `fieldname order` each.
 
 ## Changelog
+
+### 4.0.1
+* [TASK] update documentation
+
+### 4.0.0
+* [TASK] updates for v13
 
 ### 3.4.0
 * [FEATURE] add new widget for extensions
