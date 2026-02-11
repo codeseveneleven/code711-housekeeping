@@ -2,7 +2,7 @@
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -33,11 +33,11 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, title, group, giturl, gittoken, gitbranch, url,
+                --div--;core.form.tabs:general, title, group, giturl, gittoken, gitbranch, url,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.project, version, php, severity,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.typo3, latest, type, elts,
                 --div--;LLL:EXT:code711_housekeeping/Resources/Private/Language/locallang.xlf:project.tab.packages, packages,
-                --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access, hidden
+                --div--;core.form.tabs:access, hidden
             ',
         ],
     ],

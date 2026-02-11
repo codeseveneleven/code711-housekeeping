@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -28,11 +28,11 @@ class UpdateServiceTest extends BaseTestCase
      *
      * @dataProvider checkSeverityDataProvider
      */
-    public function checkSeverity(string $expected, array $given)
+    public function checkSeverity(string $expected, array $given): void
     {
         $settings = ['redVersions' => '6,7,8,9', 'orangeVersions' => '10'];
         $updateService = new UpdateService();
-        $result = $updateService->checkSeverity($given[0], $given[1], $given[2], $settings);
+        $result = $updateService->checkSeverity($given[0], $given[1]);
         self::assertEquals($expected, $result);
     }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -21,8 +21,6 @@ namespace Code711\Code711Housekeeping\Service;
 use Code711\Code711Housekeeping\Domain\Model\Package;
 use Code711\Code711Housekeeping\Domain\Model\Project;
 use Gitlab\Client;
-use JsonException;
-use RuntimeException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -45,24 +43,24 @@ class GitApiService
         $this->gitToken = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'http_auth_token');
         $this->defaultBranch = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'defaultBranch');
 
-        if (!$this->gitToken) {
+        if ($this->gitToken === '' || $this->gitToken === '0') {
             throw new \InvalidArgumentException('Config missing', 1677369373);
         }
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function getProjectRelease(Project $project): Project
     {
         $this->giturl = $project->getGiturl();
-        if ($project->getGroup()->getGittoken()) {
+        if ($project->getGroup()->getGittoken() !== '' && $project->getGroup()->getGittoken() !== '0') {
             $this->gitToken = $project->getGroup()->getGittoken();
         }
-        if ($project->getGittoken()) {
+        if ($project->getGittoken() !== '' && $project->getGittoken() !== '0') {
             $this->gitToken = $project->getGittoken();
         }
-        if ($project->getGitbranch()) {
+        if ($project->getGitbranch() !== '' && $project->getGitbranch() !== '0') {
             $this->defaultBranch = $project->getGitbranch();
         }
 
@@ -75,7 +73,7 @@ class GitApiService
             }
             foreach ($file->packages as $item) {
                 if ($item->name === 'typo3/cms-core') {
-                    $project->setVersion(trim($item->version, 'v'));
+                    $project->setVersion(trim((string)$item->version, 'v'));
                 }
                 if ($item->type === 'typo3-cms-extension' && !$project->hasPackage($item->name)) {
                     $package = new Package();
@@ -101,8 +99,8 @@ class GitApiService
         $client = $this->connect();
         try {
             $file = $client->repositoryFiles()->getRawFile($this->getProject(), 'composer.lock', $this->defaultBranch);
-            return json_decode($file);
-        } catch (RuntimeException $e) {
+            return json_decode((string)$file);
+        } catch (\RuntimeException) {
             return false;
         }
     }

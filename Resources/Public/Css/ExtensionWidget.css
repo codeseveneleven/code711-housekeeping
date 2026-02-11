@@ -1,23 +1,23 @@
 @charset "UTF-8";
 
 .bg-green {
-    background-color: green;
-    color: white;
+    background-color: green !important;
+    color: white !important;
 }
 
 .bg-orange {
-    background-color: orange;
-    color: white;
+    background-color: orange !important;
+    color: white !important;
 }
 
 .bg-red {
-    background-color: red;
-    color: white;
+    background-color: red !important;
+    color: white !important;
 }
 
 .bg-xdarkred {
-    background-color: darkred;
-    color: white;
+    background-color: darkred !important;
+    color: white !important;
 }
 
 .code711-housekeeping dl {

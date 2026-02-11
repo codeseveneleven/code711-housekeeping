@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -20,7 +20,6 @@ namespace Code711\Code711Housekeeping\Test\Unit\Service;
 
 use Code711\Code711Housekeeping\Service\GitApiService;
 use Code711\Code711Housekeeping\Service\Typo3ApiService;
-use JsonException;
 use TYPO3\TestingFramework\Core\BaseTestCase;
 
 class ApiServiceTest extends BaseTestCase
@@ -29,7 +28,7 @@ class ApiServiceTest extends BaseTestCase
      * @test
      *
      * @dataProvider getLatestTypo3ReleaseCallDataProvider
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function getLatestTypo3ReleaseCall(string $expected, string $given): void
     {

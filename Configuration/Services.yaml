@@ -17,7 +17,6 @@ services:
   dashboard.widget.projects:
     class: 'Code711\Code711Housekeeping\Widgets\ProjectsWidget'
     arguments:
-      $view: '@dashboard.views.widget'
       $options:
         groups:
         sorting:
@@ -36,7 +35,6 @@ services:
   dashboard.widget.phpversions:
     class: 'Code711\Code711Housekeeping\Widgets\PhpVersionsWidget'
     arguments:
-      $view: '@dashboard.views.widget'
       $options:
         groups:
         sorting:
@@ -54,7 +52,6 @@ services:
   dashboard.widget.extensions:
     class: 'Code711\Code711Housekeeping\Widgets\ExtensionsWidget'
     arguments:
-      $view: '@dashboard.views.widget'
       $options:
         groups:
         sorting:

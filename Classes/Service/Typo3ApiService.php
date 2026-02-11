@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -21,7 +21,6 @@ namespace Code711\Code711Housekeeping\Service;
 use Code711\Code711Housekeeping\Domain\Model\Release;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use JsonException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -42,13 +41,13 @@ class Typo3ApiService implements LoggerAwareInterface
     public function __construct()
     {
         $this->apiUrl = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'typo3Url');
-        if (empty($this->apiUrl)) {
+        if ($this->apiUrl === '' || $this->apiUrl === '0') {
             throw new \InvalidArgumentException('Config missing', 1677369373);
         }
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function getLatestTypo3Release(string $projectVersion): bool|Release
     {
@@ -60,7 +59,7 @@ class Typo3ApiService implements LoggerAwareInterface
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function getLatestTypo3ReleaseCall(string $apiUrl, string $major): bool|Release
     {
@@ -70,7 +69,7 @@ class Typo3ApiService implements LoggerAwareInterface
             $client = new Client();
             try {
                 $res = $client->get($apiUrl . 'major/' . $major . '/release/latest');
-            } catch (GuzzleException $e) {
+            } catch (GuzzleException) {
                 return false;
             }
             if ($res->getStatusCode() === 200 && $res->getHeader('content-type')[0] === 'application/json') {

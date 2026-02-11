@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -21,7 +21,6 @@ namespace Code711\Code711Housekeeping\Service;
 use Code711\Code711Housekeeping\Domain\Model\Project;
 use Code711\Code711Housekeeping\Domain\Model\Release;
 use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -46,19 +45,18 @@ class UpdateService implements LoggerAwareInterface
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public function __construct()
+    public function __construct(private readonly PersistenceManager $persistenceManager)
     {
         $this->orangeVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'orangeVersions');
         $this->redVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'redVersions');
         $this->projectRepository = GeneralUtility::makeInstance(ProjectRepository::class);
 
-        if (empty($this->orangeVersions) || empty($this->redVersions)) {
+        if ($this->orangeVersions === '' || $this->orangeVersions === '0' || ($this->redVersions === '' || $this->redVersions === '0')) {
             throw new \InvalidArgumentException('Config missing', 1677369373);
         }
     }
 
     /**
-     * @throws GuzzleException
      * @throws \JsonException
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
@@ -68,7 +66,7 @@ class UpdateService implements LoggerAwareInterface
         $project = $this->projectRepository->findByUid($id);
 
         if ($project instanceof Project) {
-            if ($project->getGiturl()) {
+            if ($project->getGiturl() !== '' && $project->getGiturl() !== '0') {
                 $this->logger->info('fetching latest project release');
                 $gitApiService = GeneralUtility::makeInstance(GitApiService::class);
                 $project = $gitApiService->getProjectRelease($project);
@@ -87,7 +85,7 @@ class UpdateService implements LoggerAwareInterface
             }
 
             $this->projectRepository->update($project);
-            $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
+            $persistenceManager = $this->persistenceManager;
             $persistenceManager->persistAll();
         }
     }

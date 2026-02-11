@@ -2,7 +2,7 @@
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -22,10 +22,10 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'p.ottmar@12bis3.de',
     'author_company' => '12bis3 / Code711',
     'state' => 'stable',
-    'version' => '3.4.0',
+    'version' => '4.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.0.0-12.4.99',
+            'typo3' => '14.0.0-14.3.99',
         ],
         'conflicts' => [
         ],

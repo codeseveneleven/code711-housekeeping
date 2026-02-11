@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -18,41 +18,43 @@ declare(strict_types=1);
 
 namespace Code711\Code711Housekeeping\Widgets;
 
-use Code711\Code711Housekeeping\Domain\Repository\ProjectRepository;
-use Doctrine\DBAL\Connection as ConnectionAlias;
 use Doctrine\DBAL\Exception;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\View\BackendViewFactory;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Dashboard\Widgets\AdditionalCssInterface;
+use TYPO3\CMS\Dashboard\Widgets\RequestAwareWidgetInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class ExtensionsWidget implements WidgetInterface, AdditionalCssInterface
+class ExtensionsWidget implements WidgetInterface, RequestAwareWidgetInterface, AdditionalCssInterface
 {
+    private ServerRequestInterface $request;
+
     public function __construct(
-        private WidgetConfigurationInterface $configuration,
-        protected ?StandaloneView $view = null,
+        private readonly WidgetConfigurationInterface $configuration,
+        private readonly BackendViewFactory $backendViewFactory,
         private array $options = [],
-    ) {
-        if (VersionNumberUtility::getNumericTypo3Version() < 12) {
-            $this->setOptions($this->options);
-        }
+    ) {}
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
     }
 
     /**
      * @throws Exception
-     * @throws InvalidQueryException
      */
     public function renderWidgetContent(): string
     {
-        $this->view->assignMultiple([
+        $view = $this->backendViewFactory->create($this->request);
+        $view->assignMultiple([
             'items' => $this->getItems(),
             'configuration' => $this->configuration,
         ]);
-        return $this->view->render('ExtensionsWidget');
+        return $view->render('Widget/ExtensionsWidget');
     }
 
     /**
@@ -107,7 +109,7 @@ class ExtensionsWidget implements WidgetInterface, AdditionalCssInterface
                     'g.code',
                     $queryBuilder->createNamedParameter(
                         $this->options['groups'],
-                        ConnectionAlias::PARAM_STR_ARRAY
+                        Connection::PARAM_STR_ARRAY
                     )
                 )
             );
@@ -115,8 +117,8 @@ class ExtensionsWidget implements WidgetInterface, AdditionalCssInterface
 
         if (!empty($this->options['sorting'])) {
             foreach ($this->options['sorting'] as $sorting) {
-                $explodes = explode(' ', $sorting);
-                if (!empty($explodes[0])) {
+                $explodes = explode(' ', (string)$sorting);
+                if (isset($explodes[0]) && ($explodes[0] !== '' && $explodes[0] !== '0')) {
                     $order = $explodes[1] ?? 'ASC';
                     $queryBuilder->addOrderBy($explodes[0], $order);
                 }

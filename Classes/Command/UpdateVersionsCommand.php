@@ -2,7 +2,7 @@
 
 /*
  * This file is part of the TYPO3 project.
- * (c) 2024 B-Factor GmbH
+ * (c) 2026 B-Factor GmbH
  *          Sudhaus7
  *          12bis3
  *          Code711.de
@@ -67,7 +67,7 @@ class UpdateVersionsCommand extends Command
         while ($row = $stmt->fetchAssociative()) {
             $output->writeln(sprintf('running %s (%s)', $row['title'], $row['url']));
             try {
-                $updateService->updateProject($row['uid'], $row);
+                $updateService->updateProject($row['uid']);
             } catch (\Exception $e) {
                 $output->writeln('Error ' . $e->getMessage());
             }
