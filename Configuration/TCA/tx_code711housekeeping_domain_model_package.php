@@ -34,8 +34,8 @@ return [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;core.form.tabs:general, title, version, latest,
-                --div--;core.form.tabs:access, hidden
+                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.general, title, version, latest,
+                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:palette.access, hidden
             ',
         ],
     ],

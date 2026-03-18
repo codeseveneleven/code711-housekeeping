@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace Code711\Code711Housekeeping\Hooks;
 
 use Code711\Code711Housekeeping\Service\UpdateService;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -31,7 +30,6 @@ class DatamapPostProcess implements LoggerAwareInterface
     use LoggerAwareTrait;
 
     /**
-     * @throws GuzzleException
      * @throws \JsonException
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException

@@ -41,15 +41,18 @@ class UpdateService implements LoggerAwareInterface
 
     protected string $redVersions = '';
 
+    protected ?PersistenceManager $persistenceManager = null;
+
     /**
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public function __construct(private readonly PersistenceManager $persistenceManager)
+    public function __construct()
     {
         $this->orangeVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'orangeVersions');
         $this->redVersions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('code711_housekeeping', 'redVersions');
         $this->projectRepository = GeneralUtility::makeInstance(ProjectRepository::class);
+        $this->persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 
         if ($this->orangeVersions === '' || $this->orangeVersions === '0' || ($this->redVersions === '' || $this->redVersions === '0')) {
             throw new \InvalidArgumentException('Config missing', 1677369373);
@@ -66,22 +69,25 @@ class UpdateService implements LoggerAwareInterface
         $project = $this->projectRepository->findByUid($id);
 
         if ($project instanceof Project) {
+
             if ($project->getGiturl() !== '' && $project->getGiturl() !== '0') {
                 $this->logger->info('fetching latest project release');
                 $gitApiService = GeneralUtility::makeInstance(GitApiService::class);
                 $project = $gitApiService->getProjectRelease($project);
             }
 
-            $this->logger->info('fetching latest typo3 release');
-            $typo3ApiService = GeneralUtility::makeInstance(Typo3ApiService::class);
-            $latestRelease = $typo3ApiService->getLatestTypo3Release($project->getVersion());
+            if ($project->getVersion()) {
+                $this->logger->info('fetching latest typo3 release');
+                $typo3ApiService = GeneralUtility::makeInstance(Typo3ApiService::class);
+                $latestRelease = $typo3ApiService->getLatestTypo3Release($project->getVersion());
 
-            if ($latestRelease) {
-                $project->setLatest($latestRelease->getVersion());
-                $project->setElts($latestRelease->isElts());
-                $project->setType($latestRelease->getType());
-                $severity = $this->checkSeverity($project->getVersion(), $latestRelease);
-                $project->setSeverity($severity);
+                if ($latestRelease) {
+                    $project->setLatest($latestRelease->getVersion());
+                    $project->setElts($latestRelease->isElts());
+                    $project->setType($latestRelease->getType());
+                    $severity = $this->checkSeverity($project->getVersion(), $latestRelease);
+                    $project->setSeverity($severity);
+                }
             }
 
             $this->projectRepository->update($project);
