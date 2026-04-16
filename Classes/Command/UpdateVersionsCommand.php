@@ -17,13 +17,13 @@
 namespace Code711\Code711Housekeeping\Command;
 
 use Code711\Code711Housekeeping\Service\UpdateService;
-use Doctrine\DBAL\Connection as ConnectionAlias;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -59,7 +59,7 @@ class UpdateVersionsCommand extends Command
             ->from('tx_code711housekeeping_domain_model_project', 'p')
             ->join('p', 'tx_code711housekeeping_domain_model_group', 'g', 'g.uid = p.group')->where($query->expr()->in('g.title', $query->createNamedParameter(
                 $input->getArgument('group'),
-                ConnectionAlias::PARAM_STR_ARRAY
+                Connection::PARAM_STR_ARRAY
             )))->executeQuery();
 
         $updateService = GeneralUtility::makeInstance(UpdateService::class);
